@@ -1,0 +1,1 @@
+Index every markdown file under sandbox/papers/ using the corpus_indexer skill (list_dir then index_document for each file). Then use retriever to find which paper discusses direct preference optimization (DPO). Formatter: one short paragraph naming the paper filename and the main idea â€” use retriever chunks only, not the web.

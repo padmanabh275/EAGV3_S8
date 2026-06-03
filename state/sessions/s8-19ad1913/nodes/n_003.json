@@ -1,0 +1,23 @@
+{
+  "node_id": "n:3",
+  "skill": "retriever",
+  "status": "failed",
+  "inputs": [
+    "n:2"
+  ],
+  "result": {
+    "success": false,
+    "agent_name": "retriever",
+    "output": {},
+    "artifacts": [],
+    "successors": [],
+    "cost": 0.0,
+    "elapsed_s": 0.0,
+    "provider": "",
+    "error": "exception: ExceptionGroup: unhandled errors in a TaskGroup (1 sub-exception)"
+  },
+  "prompt_sent": "(exception before prompt-render)",
+  "started_at": 1780489260.4845207,
+  "completed_at": 1780489260.4845207,
+  "retries": 0
+}

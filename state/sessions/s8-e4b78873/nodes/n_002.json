@@ -1,0 +1,26 @@
+{
+  "node_id": "n:2",
+  "skill": "coder",
+  "status": "complete",
+  "inputs": [
+    "USER_QUERY"
+  ],
+  "result": {
+    "success": true,
+    "agent_name": "coder",
+    "output": {
+      "code": "total = sum(range(1, 1_000_001))\nprint(total)\n",
+      "rationale": "The script computes the exact sum of all integers from 1 to 1,000,000."
+    },
+    "artifacts": [],
+    "successors": [],
+    "cost": 0.0,
+    "elapsed_s": 4.416827201843262,
+    "provider": "openai",
+    "error": null
+  },
+  "prompt_sent": "You are the Coder skill. You write a short Python program that the\norchestrator runs in a subprocess sandbox (SandboxExecutor). You make\nno tool calls and no web access.\n\nRead USER_QUERY when it appears in the prompt, and QUESTION when the\nPlanner set `metadata.question` on your node. Implement exactly what\nthose ask for — numbers, counts, aggregates, simulations, or other\nlogic that must be **executed**, not guessed.\n\n## Sandbox environment\n\nYour `code` is saved as `main.py` and run with the same Python as the\norchestrator. The runner captures **stdout** and **stderr**; exit code\n0 means success.\n\nConstraints:\n  - **Stdlib only** — no `pip install`, no third-party imports.\n  - **Print the answer** — use `print(...)` for every result the\n    Formatter must report. Do not rely on REPL-style bare expressions.\n  - **No interactive input** — do not call `input()`.\n  - **Keep it fast** — avoid brute force beyond ~30s wall-clock; prefer\n    closed-form math (`sum(range(...))`, `math.comb`, etc.) when valid.\n  - **Deterministic** — no randomness unless the question requires it.\n  - **No markdown** inside the `code` string — raw Python only.\n\nOptional: write files in the working directory only if the task asks;\notherwise stdout is enough.\n\n## Procedure\n\n  1. Parse the computation requested in USER_QUERY / QUESTION.\n  2. Write minimal, correct Python that prints the exact answer(s).\n  3. If multiple values are required, print labeled lines, e.g.\n     `print(\"sum\", total)` or one JSON line via `json.dumps`.\n  4. Emit the JSON object below (no prose, no markdown fences).\n\n## Output schema\n\n  {\n    \"code\": \"<complete Python source as a single string>\",\n    \"rationale\": \"<one short sentence: what the script computes>\"\n  }\n\nThe orchestrator extracts `code` and passes it to SandboxExecutor\nautomatically (`internal_successors` in `agent_config.yaml`). You do\nnot emit `successors` or `nodes`.\n\n## Quality rules\n\n  - The script must be runnable as-is (imports at top, no `if __name__`\n    required but allowed).\n  - Prefer integers for counting problems; use `decimal` only if needed.\n  - On expected failure (bad input in upstream data), print a clear\n    error message to stderr and exit non-zero.\n  - Do not embed the final user-facing essay in `code` — only compute\n    and print facts; the Formatter writes the final answer.\n\n## Examples (shape only)\n\nSum 1..N:\n\n  code: \"total = sum(range(1, 1_000_001))\\nprint(total)\\n\"\n\nPrimes below a limit:\n\n  code: \"def sieve(n):\\n    ...\\nprint(count)\\n\"\n\nUSER_QUERY: Compute the exact sum of all integers from 1 to 1_000_000 inclusive. Use the coder skill to run Python in the sandbox. Do not answer by mental math — the final answer must come from executed code stdout.\n\nQUESTION: Print the exact sum of integers from 1 to 1_000_000.\n\nMEMORY HITS (8 from FAISS):\n  - [fact] Claude Shannon was born in 1916, died in 2001, and made contributions in information theory, digital circuit design theory, and cryptographic theory.\n      source: user_query\n  - [fact] Claude Shannon was born in 1916 and died in 2001 with contributions to information theory, digital circuit design theory, and cryptographic theory.\n      source: user_query\n  - [fact] Claude Shannon was born in 1916 and died in 2001 with contributions to information theory, digital circuit design theory, and cryptographic theory.\n      source: user_query\n  - [tool_outcome] Attempting to read from non-existent file path.\n      source: user_query\n      raw: Read /nonexistent/path.txt and tell me what's in it.\n  - [fact] Claude Shannon's birth date, death date, and contributions to information theory.\n      source: user_query\n  - [tool_outcome] Population data comparison for London, Paris, and Berlin\n      source: user_query\n      raw: Find the populations of London, Paris, Berlin and tell me which two are closest in size.\n  - [tool_outcome] Population data comparison for London, Paris, and Berlin\n      source: user_query\n      raw: Find the populations of London, Paris, Berlin and tell me which two are closest in size.\n  - [fact] Claude Shannon birth and death dates and three contributions to information theory\n      source: user_query\n      raw: When was Claude Shannon born and when did he die? Name three of his contributions to information theory.\n\nINPUTS:\n[\n  {\n    \"id\": \"USER_QUERY\",\n    \"kind\": \"query\",\n    \"value\": \"Compute the exact sum of all integers from 1 to 1_000_000 inclusive. Use the coder skill to run Python in the sandbox. Do not answer by mental math \\u2014 the final answer must come from executed code stdout.\"\n  }\n]",
+  "started_at": 1780487518.886186,
+  "completed_at": 1780487523.303013,
+  "retries": 0
+}

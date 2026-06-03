@@ -1,0 +1,34 @@
+{
+  "node_id": "n:50",
+  "skill": "distiller",
+  "status": "complete",
+  "inputs": [
+    "USER_QUERY"
+  ],
+  "result": {
+    "success": true,
+    "agent_name": "distiller",
+    "output": {
+      "fields": {
+        "birth_year": "1916",
+        "death_year": "2001",
+        "contributions": [
+          "information theory",
+          "digital circuit design theory",
+          "cryptographic theory"
+        ]
+      },
+      "rationale": "Claude Shannon was born in 1916 and died in 2001; his contributions were listed as information theory, digital circuit design theory, and cryptographic theory."
+    },
+    "artifacts": [],
+    "successors": [],
+    "cost": 0.0,
+    "elapsed_s": 5.329101324081421,
+    "provider": "openai",
+    "error": null
+  },
+  "prompt_sent": "You are the Distiller skill. You receive raw text (typically the\n`findings` of one or more Researcher nodes, or the `chunks` of a\nRetriever node) and produce a small structured record.\n\nYou make no tool calls. You do no web access. Everything you need is\nalready in the prompt under INPUTS.\n\nProcedure:\n  1. Identify what fields the user's question implies (people, dates,\n     numbers, comparisons, percentages, attributions).\n  2. Pull those fields out of the inputs.\n  3. Emit a compact JSON record. Fields with no evidence in the inputs\n     are omitted, not made up.\n\nOutput schema (JSON, no prose, no markdown fences):\n\n  {\n    \"fields\": { \"<field_name>\": \"<value>\", ... },\n    \"rationale\": \"<one short sentence saying which input supports each field>\"\n  }\n\nNotes:\n  - The fields dictionary is the load-bearing output; downstream\n    Formatter nodes read it.\n  - When the question is a comparison (`fastest growing`, `largest`),\n    emit a `comparison` key with `winner: <id>` and `reason: <short>`.\n  - When the question's evidence is missing, set `fields: {}` and put\n    the gap in `rationale`. Do not invent.\n\nA Critic node may run after you. Its evaluation will fail if you\ninvented fields or made claims unsupported by the inputs.\n\nUSER_QUERY: Extract birth_year, death_year, and contributions (array of exactly 4 strings) from SOURCE below only.\r\n\r\nUse distiller, then critic, then formatter. Wire formatter inputs to the critic node (n:critic label), not directly to distiller.\r\n\r\nCritic rule (put in critic metadata.question): Fail unless the distiller JSON field contributions is an array of exactly 4 strings. Count elements in the array; do not use memory hits.\r\n\r\nSOURCE:\r\nClaude Shannon was born in 1916 and died in 2001. His three contributions were information theory, digital circuit design theory, and cryptographic theory.\r\n\n\nQUESTION: Extract birth_year, death_year, and contributions from the provided source.\n\nMEMORY HITS (8 from FAISS):\n  - [fact] Claude Shannon was born in 1916, died in 2001, and made contributions in information theory, digital circuit design theory, and cryptographic theory.\n      source: user_query\n  - [fact] Claude Shannon was born in 1916 and died in 2001 with contributions to information theory, digital circuit design theory, and cryptographic theory.\n      source: user_query\n  - [fact] Claude Shannon's birth date, death date, and contributions to information theory.\n      source: user_query\n  - [fact] Claude Shannon birth and death dates and three contributions to information theory\n      source: user_query\n      raw: When was Claude Shannon born and when did he die? Name three of his contributions to information theory.\n  - [tool_outcome] Population data comparison for London, Paris, and Berlin\n      source: user_query\n      raw: Find the populations of London, Paris, Berlin and tell me which two are closest in size.\n  - [tool_outcome] Population data comparison for London, Paris, and Berlin\n      source: user_query\n      raw: Find the populations of London, Paris, Berlin and tell me which two are closest in size.\n  - [tool_outcome] Population lookup and comparison for London, Paris, and Berlin\n      source: user_query\n      raw: Find the populations of London, Paris, Berlin and tell me which two are closest in size.\n  - [tool_outcome] Attempting to read from non-existent file path.\n      source: user_query\n      raw: Read /nonexistent/path.txt and tell me what's in it.\n\nINPUTS:\n[\n  {\n    \"id\": \"USER_QUERY\",\n    \"kind\": \"query\",\n    \"value\": \"Extract birth_year, death_year, and contributions (array of exactly 4 strings) from SOURCE below only.\\r\\n\\r\\nUse distiller, then critic, then formatter. Wire formatter inputs to the critic node (n:critic label), not directly to distiller.\\r\\n\\r\\nCritic rule (put in critic metadata.question): Fail unless the distiller JSON field contributions is an array of exactly 4 strings. Count elements in the array; do not use memory hits.\\r\\n\\r\\nSOURCE:\\r\\nClaude Shannon was born in 1916 and died in 2001. His three contributions were information theory, digital circuit design theory, and cryptographic theory.\\r\\n\"\n  }\n]",
+  "started_at": 1780486964.505415,
+  "completed_at": 1780486969.8345163,
+  "retries": 0
+}

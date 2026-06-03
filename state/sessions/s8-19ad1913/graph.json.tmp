@@ -1,0 +1,390 @@
+{
+  "directed": true,
+  "multigraph": false,
+  "graph": {},
+  "nodes": [
+    {
+      "skill": "planner",
+      "inputs": [
+        "USER_QUERY"
+      ],
+      "metadata": {},
+      "status": "complete",
+      "result": {
+        "success": true,
+        "agent_name": "planner",
+        "output": {
+          "rationale": "Index the markdown files, retrieve relevant content about direct preference optimization, and format the final answer.",
+          "nodes": [
+            {
+              "skill": "corpus_indexer",
+              "inputs": [
+                "USER_QUERY"
+              ],
+              "metadata": {
+                "label": "idx",
+                "question": "Index every markdown file under sandbox/papers/ using list_dir and index_document."
+              }
+            },
+            {
+              "skill": "retriever",
+              "inputs": [
+                "n:idx"
+              ],
+              "metadata": {
+                "label": "ret",
+                "question": "Which paper discusses direct preference optimization (DPO)?"
+              }
+            },
+            {
+              "skill": "formatter",
+              "inputs": [
+                "USER_QUERY",
+                "n:ret"
+              ],
+              "metadata": {
+                "label": "out",
+                "question": "Provide a short paragraph naming the paper filename and the main idea using retriever chunks only."
+              }
+            }
+          ]
+        },
+        "artifacts": [],
+        "successors": [
+          {
+            "skill": "corpus_indexer",
+            "inputs": [
+              "USER_QUERY"
+            ],
+            "metadata": {
+              "label": "idx",
+              "question": "Index every markdown file under sandbox/papers/ using list_dir and index_document."
+            }
+          },
+          {
+            "skill": "retriever",
+            "inputs": [
+              "n:idx"
+            ],
+            "metadata": {
+              "label": "ret",
+              "question": "Which paper discusses direct preference optimization (DPO)?"
+            }
+          },
+          {
+            "skill": "formatter",
+            "inputs": [
+              "USER_QUERY",
+              "n:ret"
+            ],
+            "metadata": {
+              "label": "out",
+              "question": "Provide a short paragraph naming the paper filename and the main idea using retriever chunks only."
+            }
+          }
+        ],
+        "cost": 0.0,
+        "elapsed_s": 12.27624797821045,
+        "provider": "openai",
+        "error": null
+      },
+      "_result_typed": true,
+      "id": "n:1"
+    },
+    {
+      "skill": "corpus_indexer",
+      "inputs": [
+        "USER_QUERY"
+      ],
+      "metadata": {
+        "label": "idx",
+        "question": "Index every markdown file under sandbox/papers/ using list_dir and index_document."
+      },
+      "status": "complete",
+      "result": {
+        "success": true,
+        "agent_name": "corpus_indexer",
+        "output": {
+          "indexed_files": [
+            {
+              "path": "papers/attention.md",
+              "chunks_indexed": 3
+            },
+            {
+              "path": "papers/cot.md",
+              "chunks_indexed": 3
+            },
+            {
+              "path": "papers/dpo.md",
+              "chunks_indexed": 3
+            },
+            {
+              "path": "papers/lora.md",
+              "chunks_indexed": 3
+            },
+            {
+              "path": "papers/react.md",
+              "chunks_indexed": 3
+            }
+          ],
+          "total_chunks": 15,
+          "rationale": "Indexed all markdown files under sandbox/papers/."
+        },
+        "artifacts": [],
+        "successors": [],
+        "cost": 0.0,
+        "elapsed_s": 89.52407145500183,
+        "provider": "openai",
+        "error": null
+      },
+      "_result_typed": true,
+      "id": "n:2"
+    },
+    {
+      "skill": "retriever",
+      "inputs": [
+        "n:2"
+      ],
+      "metadata": {
+        "label": "ret",
+        "question": "Which paper discusses direct preference optimization (DPO)?"
+      },
+      "status": "failed",
+      "result": {
+        "success": false,
+        "agent_name": "retriever",
+        "output": {},
+        "artifacts": [],
+        "successors": [],
+        "cost": 0.0,
+        "elapsed_s": 0.0,
+        "provider": "",
+        "error": "exception: ExceptionGroup: unhandled errors in a TaskGroup (1 sub-exception)"
+      },
+      "_result_typed": true,
+      "id": "n:3"
+    },
+    {
+      "skill": "formatter",
+      "inputs": [
+        "USER_QUERY",
+        "n:3"
+      ],
+      "metadata": {
+        "label": "out",
+        "question": "Provide a short paragraph naming the paper filename and the main idea using retriever chunks only."
+      },
+      "status": "pending",
+      "id": "n:4"
+    },
+    {
+      "skill": "planner",
+      "inputs": [
+        "USER_QUERY"
+      ],
+      "metadata": {
+        "failure_report": "node=n:3 skill=retriever reason=upstream_failure error=exception: ExceptionGroup: unhandled errors in a TaskGroup (1 sub-exception)",
+        "recovers": "n:3",
+        "recovery_reason": "upstream_failure"
+      },
+      "status": "complete",
+      "result": {
+        "success": true,
+        "agent_name": "planner",
+        "output": {
+          "rationale": "Index the markdown files, then retrieve the relevant paper discussing direct preference optimization.",
+          "nodes": [
+            {
+              "skill": "corpus_indexer",
+              "inputs": [
+                "USER_QUERY"
+              ],
+              "metadata": {
+                "label": "idx",
+                "question": "List and index every markdown file under sandbox/papers/"
+              }
+            },
+            {
+              "skill": "retriever",
+              "inputs": [
+                "n:idx"
+              ],
+              "metadata": {
+                "label": "ret",
+                "question": "Which paper discusses direct preference optimization (DPO)?"
+              }
+            },
+            {
+              "skill": "formatter",
+              "inputs": [
+                "USER_QUERY",
+                "n:ret"
+              ],
+              "metadata": {
+                "label": "out",
+                "question": "Provide a short paragraph naming the paper filename and the main idea using retriever chunks only."
+              }
+            }
+          ]
+        },
+        "artifacts": [],
+        "successors": [
+          {
+            "skill": "corpus_indexer",
+            "inputs": [
+              "USER_QUERY"
+            ],
+            "metadata": {
+              "label": "idx",
+              "question": "List and index every markdown file under sandbox/papers/"
+            }
+          },
+          {
+            "skill": "retriever",
+            "inputs": [
+              "n:idx"
+            ],
+            "metadata": {
+              "label": "ret",
+              "question": "Which paper discusses direct preference optimization (DPO)?"
+            }
+          },
+          {
+            "skill": "formatter",
+            "inputs": [
+              "USER_QUERY",
+              "n:ret"
+            ],
+            "metadata": {
+              "label": "out",
+              "question": "Provide a short paragraph naming the paper filename and the main idea using retriever chunks only."
+            }
+          }
+        ],
+        "cost": 0.0,
+        "elapsed_s": 5.98409366607666,
+        "provider": "openai",
+        "error": null
+      },
+      "_result_typed": true,
+      "id": "n:5"
+    },
+    {
+      "skill": "corpus_indexer",
+      "inputs": [
+        "USER_QUERY"
+      ],
+      "metadata": {
+        "label": "idx",
+        "question": "List and index every markdown file under sandbox/papers/"
+      },
+      "status": "complete",
+      "result": {
+        "success": true,
+        "agent_name": "corpus_indexer",
+        "output": {
+          "indexed_files": [
+            {
+              "path": "papers/attention.md",
+              "chunks_indexed": 3
+            },
+            {
+              "path": "papers/cot.md",
+              "chunks_indexed": 3
+            },
+            {
+              "path": "papers/dpo.md",
+              "chunks_indexed": 3
+            },
+            {
+              "path": "papers/lora.md",
+              "chunks_indexed": 3
+            },
+            {
+              "path": "papers/react.md",
+              "chunks_indexed": 3
+            }
+          ],
+          "total_chunks": 15,
+          "rationale": "Indexed all markdown files under sandbox/papers/."
+        },
+        "artifacts": [],
+        "successors": [],
+        "cost": 0.0,
+        "elapsed_s": 90.67636942863464,
+        "provider": "openai",
+        "error": null
+      },
+      "_result_typed": true,
+      "id": "n:6"
+    },
+    {
+      "skill": "retriever",
+      "inputs": [
+        "n:6"
+      ],
+      "metadata": {
+        "label": "ret",
+        "question": "Which paper discusses direct preference optimization (DPO)?"
+      },
+      "status": "failed",
+      "result": {
+        "success": false,
+        "agent_name": "retriever",
+        "output": {},
+        "artifacts": [],
+        "successors": [],
+        "cost": 0.0,
+        "elapsed_s": 0.0,
+        "provider": "",
+        "error": "exception: ExceptionGroup: unhandled errors in a TaskGroup (1 sub-exception)"
+      },
+      "_result_typed": true,
+      "id": "n:7"
+    },
+    {
+      "skill": "formatter",
+      "inputs": [
+        "USER_QUERY",
+        "n:7"
+      ],
+      "metadata": {
+        "label": "out",
+        "question": "Provide a short paragraph naming the paper filename and the main idea using retriever chunks only."
+      },
+      "status": "pending",
+      "id": "n:8"
+    },
+    {
+      "skill": "planner",
+      "inputs": [
+        "USER_QUERY"
+      ],
+      "metadata": {
+        "failure_report": "node=n:7 skill=retriever reason=upstream_failure error=exception: ExceptionGroup: unhandled errors in a TaskGroup (1 sub-exception)",
+        "recovers": "n:7",
+        "recovery_reason": "upstream_failure"
+      },
+      "status": "running",
+      "id": "n:9"
+    }
+  ],
+  "edges": [
+    {
+      "source": "n:2",
+      "target": "n:3"
+    },
+    {
+      "source": "n:3",
+      "target": "n:4"
+    },
+    {
+      "source": "n:6",
+      "target": "n:7"
+    },
+    {
+      "source": "n:7",
+      "target": "n:8"
+    }
+  ]
+}

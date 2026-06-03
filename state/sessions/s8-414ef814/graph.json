@@ -1,0 +1,3458 @@
+{
+  "directed": true,
+  "multigraph": false,
+  "graph": {},
+  "nodes": [
+    {
+      "skill": "planner",
+      "inputs": [
+        "USER_QUERY"
+      ],
+      "metadata": {},
+      "status": "complete",
+      "result": {
+        "success": true,
+        "agent_name": "planner",
+        "output": {
+          "rationale": "Extract structured information from the provided source, validate the contributions, and format the final output.",
+          "nodes": [
+            {
+              "skill": "distiller",
+              "inputs": [
+                "USER_QUERY"
+              ],
+              "metadata": {
+                "label": "d1",
+                "question": "Extract birth_year, death_year, and contributions from the source."
+              }
+            },
+            {
+              "skill": "critic",
+              "inputs": [
+                "n:d1"
+              ],
+              "metadata": {
+                "label": "c1",
+                "question": "Fail unless the distiller JSON field contributions is an array of exactly 4 strings."
+              }
+            },
+            {
+              "skill": "formatter",
+              "inputs": [
+                "USER_QUERY",
+                "n:c1"
+              ],
+              "metadata": {
+                "label": "out"
+              }
+            }
+          ]
+        },
+        "artifacts": [],
+        "successors": [
+          {
+            "skill": "distiller",
+            "inputs": [
+              "USER_QUERY"
+            ],
+            "metadata": {
+              "label": "d1",
+              "question": "Extract birth_year, death_year, and contributions from the source."
+            }
+          },
+          {
+            "skill": "critic",
+            "inputs": [
+              "n:d1"
+            ],
+            "metadata": {
+              "label": "c1",
+              "question": "Fail unless the distiller JSON field contributions is an array of exactly 4 strings."
+            }
+          },
+          {
+            "skill": "formatter",
+            "inputs": [
+              "USER_QUERY",
+              "n:c1"
+            ],
+            "metadata": {
+              "label": "out"
+            }
+          }
+        ],
+        "cost": 0.0,
+        "elapsed_s": 6.945570945739746,
+        "provider": "openai",
+        "error": null
+      },
+      "_result_typed": true,
+      "id": "n:1"
+    },
+    {
+      "skill": "distiller",
+      "inputs": [
+        "USER_QUERY"
+      ],
+      "metadata": {
+        "label": "d1",
+        "question": "Extract birth_year, death_year, and contributions from the source."
+      },
+      "status": "complete",
+      "result": {
+        "success": true,
+        "agent_name": "distiller",
+        "output": {
+          "fields": {
+            "birth_year": "1916",
+            "death_year": "2001",
+            "contributions": [
+              "information theory",
+              "digital circuit design theory",
+              "cryptographic theory"
+            ]
+          },
+          "rationale": "Claude Shannon was born in 1916 and died in 2001; his contributions were listed as information theory, digital circuit design theory, and cryptographic theory."
+        },
+        "artifacts": [],
+        "successors": [],
+        "cost": 0.0,
+        "elapsed_s": 4.839805603027344,
+        "provider": "openai",
+        "error": null
+      },
+      "_result_typed": true,
+      "id": "n:2"
+    },
+    {
+      "skill": "critic",
+      "inputs": [
+        "n:2"
+      ],
+      "metadata": {
+        "label": "c1",
+        "question": "Fail unless the distiller JSON field contributions is an array of exactly 4 strings."
+      },
+      "status": "complete",
+      "result": {
+        "success": true,
+        "agent_name": "critic",
+        "output": {
+          "verdict": "fail",
+          "rationale": "The contributions field is an array of 3 strings instead of the required 4."
+        },
+        "artifacts": [],
+        "successors": [],
+        "cost": 0.0,
+        "elapsed_s": 3.7805049419403076,
+        "provider": "openai",
+        "error": null
+      },
+      "_result_typed": true,
+      "id": "n:3"
+    },
+    {
+      "skill": "formatter",
+      "inputs": [
+        "USER_QUERY",
+        "n:3"
+      ],
+      "metadata": {
+        "label": "out"
+      },
+      "status": "skipped",
+      "id": "n:4"
+    },
+    {
+      "skill": "planner",
+      "inputs": [
+        "USER_QUERY"
+      ],
+      "metadata": {
+        "failure_report": "critic failed target=n:2 child=n:4 rationale=The contributions field is an array of 3 strings instead of the required 4.",
+        "recovers": "n:2",
+        "recovery_reason": "critic_fail"
+      },
+      "status": "complete",
+      "result": {
+        "success": true,
+        "agent_name": "planner",
+        "output": {
+          "rationale": "Extract structured information from the provided source, then validate the contributions format.",
+          "nodes": [
+            {
+              "skill": "distiller",
+              "inputs": [
+                "USER_QUERY"
+              ],
+              "metadata": {
+                "label": "d1",
+                "question": "Extract birth_year, death_year, and contributions from the source."
+              }
+            },
+            {
+              "skill": "critic",
+              "inputs": [
+                "n:d1"
+              ],
+              "metadata": {
+                "label": "c1",
+                "question": "Fail unless the distiller JSON field contributions is an array of exactly 4 strings."
+              }
+            },
+            {
+              "skill": "formatter",
+              "inputs": [
+                "USER_QUERY",
+                "n:c1"
+              ],
+              "metadata": {
+                "label": "out"
+              }
+            }
+          ]
+        },
+        "artifacts": [],
+        "successors": [
+          {
+            "skill": "distiller",
+            "inputs": [
+              "USER_QUERY"
+            ],
+            "metadata": {
+              "label": "d1",
+              "question": "Extract birth_year, death_year, and contributions from the source."
+            }
+          },
+          {
+            "skill": "critic",
+            "inputs": [
+              "n:d1"
+            ],
+            "metadata": {
+              "label": "c1",
+              "question": "Fail unless the distiller JSON field contributions is an array of exactly 4 strings."
+            }
+          },
+          {
+            "skill": "formatter",
+            "inputs": [
+              "USER_QUERY",
+              "n:c1"
+            ],
+            "metadata": {
+              "label": "out"
+            }
+          }
+        ],
+        "cost": 0.0,
+        "elapsed_s": 10.545886278152466,
+        "provider": "openai",
+        "error": null
+      },
+      "_result_typed": true,
+      "id": "n:5"
+    },
+    {
+      "skill": "distiller",
+      "inputs": [
+        "USER_QUERY"
+      ],
+      "metadata": {
+        "label": "d1",
+        "question": "Extract birth_year, death_year, and contributions from the source."
+      },
+      "status": "complete",
+      "result": {
+        "success": true,
+        "agent_name": "distiller",
+        "output": {
+          "fields": {
+            "birth_year": "1916",
+            "death_year": "2001",
+            "contributions": [
+              "information theory",
+              "digital circuit design theory",
+              "cryptographic theory"
+            ]
+          },
+          "rationale": "Claude Shannon was born in 1916 and died in 2001; his contributions were listed as information theory, digital circuit design theory, and cryptographic theory."
+        },
+        "artifacts": [],
+        "successors": [],
+        "cost": 0.0,
+        "elapsed_s": 5.713946104049683,
+        "provider": "openai",
+        "error": null
+      },
+      "_result_typed": true,
+      "id": "n:6"
+    },
+    {
+      "skill": "critic",
+      "inputs": [
+        "n:6"
+      ],
+      "metadata": {
+        "label": "c1",
+        "question": "Fail unless the distiller JSON field contributions is an array of exactly 4 strings."
+      },
+      "status": "complete",
+      "result": {
+        "success": true,
+        "agent_name": "critic",
+        "output": {
+          "verdict": "fail",
+          "rationale": "The contributions field is an array of 3 strings instead of the required 4 strings."
+        },
+        "artifacts": [],
+        "successors": [],
+        "cost": 0.0,
+        "elapsed_s": 4.060456037521362,
+        "provider": "openai",
+        "error": null
+      },
+      "_result_typed": true,
+      "id": "n:7"
+    },
+    {
+      "skill": "formatter",
+      "inputs": [
+        "USER_QUERY",
+        "n:7"
+      ],
+      "metadata": {
+        "label": "out"
+      },
+      "status": "skipped",
+      "id": "n:8"
+    },
+    {
+      "skill": "planner",
+      "inputs": [
+        "USER_QUERY"
+      ],
+      "metadata": {
+        "failure_report": "critic failed target=n:6 child=n:8 rationale=The contributions field is an array of 3 strings instead of the required 4 strings.",
+        "recovers": "n:6",
+        "recovery_reason": "critic_fail"
+      },
+      "status": "complete",
+      "result": {
+        "success": true,
+        "agent_name": "planner",
+        "output": {
+          "rationale": "Extract structured information from the provided source, then validate the contributions format before formatting the final output.",
+          "nodes": [
+            {
+              "skill": "distiller",
+              "inputs": [
+                "USER_QUERY"
+              ],
+              "metadata": {
+                "label": "d1",
+                "question": "Extract birth_year, death_year, and contributions from the source."
+              }
+            },
+            {
+              "skill": "critic",
+              "inputs": [
+                "n:d1"
+              ],
+              "metadata": {
+                "label": "c1",
+                "question": "Fail unless the contributions field is an array of exactly 4 strings."
+              }
+            },
+            {
+              "skill": "formatter",
+              "inputs": [
+                "USER_QUERY",
+                "n:c1"
+              ],
+              "metadata": {
+                "label": "out"
+              }
+            }
+          ]
+        },
+        "artifacts": [],
+        "successors": [
+          {
+            "skill": "distiller",
+            "inputs": [
+              "USER_QUERY"
+            ],
+            "metadata": {
+              "label": "d1",
+              "question": "Extract birth_year, death_year, and contributions from the source."
+            }
+          },
+          {
+            "skill": "critic",
+            "inputs": [
+              "n:d1"
+            ],
+            "metadata": {
+              "label": "c1",
+              "question": "Fail unless the contributions field is an array of exactly 4 strings."
+            }
+          },
+          {
+            "skill": "formatter",
+            "inputs": [
+              "USER_QUERY",
+              "n:c1"
+            ],
+            "metadata": {
+              "label": "out"
+            }
+          }
+        ],
+        "cost": 0.0,
+        "elapsed_s": 7.214736461639404,
+        "provider": "openai",
+        "error": null
+      },
+      "_result_typed": true,
+      "id": "n:9"
+    },
+    {
+      "skill": "distiller",
+      "inputs": [
+        "USER_QUERY"
+      ],
+      "metadata": {
+        "label": "d1",
+        "question": "Extract birth_year, death_year, and contributions from the source."
+      },
+      "status": "complete",
+      "result": {
+        "success": true,
+        "agent_name": "distiller",
+        "output": {
+          "fields": {
+            "birth_year": "1916",
+            "death_year": "2001",
+            "contributions": [
+              "information theory",
+              "digital circuit design theory",
+              "cryptographic theory"
+            ]
+          },
+          "rationale": "Claude Shannon was born in 1916 and died in 2001, with contributions in information theory, digital circuit design theory, and cryptographic theory."
+        },
+        "artifacts": [],
+        "successors": [],
+        "cost": 0.0,
+        "elapsed_s": 5.210157155990601,
+        "provider": "openai",
+        "error": null
+      },
+      "_result_typed": true,
+      "id": "n:10"
+    },
+    {
+      "skill": "critic",
+      "inputs": [
+        "n:10"
+      ],
+      "metadata": {
+        "label": "c1",
+        "question": "Fail unless the contributions field is an array of exactly 4 strings."
+      },
+      "status": "complete",
+      "result": {
+        "success": true,
+        "agent_name": "critic",
+        "output": {
+          "verdict": "fail",
+          "rationale": "The contributions field is an array of only 3 strings, while it should contain exactly 4 strings."
+        },
+        "artifacts": [],
+        "successors": [],
+        "cost": 0.0,
+        "elapsed_s": 4.898025274276733,
+        "provider": "openai",
+        "error": null
+      },
+      "_result_typed": true,
+      "id": "n:11"
+    },
+    {
+      "skill": "formatter",
+      "inputs": [
+        "USER_QUERY",
+        "n:11"
+      ],
+      "metadata": {
+        "label": "out"
+      },
+      "status": "skipped",
+      "id": "n:12"
+    },
+    {
+      "skill": "planner",
+      "inputs": [
+        "USER_QUERY"
+      ],
+      "metadata": {
+        "failure_report": "critic failed target=n:10 child=n:12 rationale=The contributions field is an array of only 3 strings, while it should contain exactly 4 strings.",
+        "recovers": "n:10",
+        "recovery_reason": "critic_fail"
+      },
+      "status": "complete",
+      "result": {
+        "success": true,
+        "agent_name": "planner",
+        "output": {
+          "rationale": "Extract the required fields from the source, then evaluate the contributions array for correctness before formatting the final output.",
+          "nodes": [
+            {
+              "skill": "distiller",
+              "inputs": [
+                "USER_QUERY"
+              ],
+              "metadata": {
+                "label": "distill",
+                "question": "Extract birth_year, death_year, and contributions from the provided source."
+              }
+            },
+            {
+              "skill": "critic",
+              "inputs": [
+                "n:distill"
+              ],
+              "metadata": {
+                "label": "critic",
+                "question": "Fail unless the distiller JSON field contributions is an array of exactly 4 strings."
+              }
+            },
+            {
+              "skill": "formatter",
+              "inputs": [
+                "USER_QUERY",
+                "n:critic"
+              ],
+              "metadata": {
+                "label": "out"
+              }
+            }
+          ]
+        },
+        "artifacts": [],
+        "successors": [
+          {
+            "skill": "distiller",
+            "inputs": [
+              "USER_QUERY"
+            ],
+            "metadata": {
+              "label": "distill",
+              "question": "Extract birth_year, death_year, and contributions from the provided source."
+            }
+          },
+          {
+            "skill": "critic",
+            "inputs": [
+              "n:distill"
+            ],
+            "metadata": {
+              "label": "critic",
+              "question": "Fail unless the distiller JSON field contributions is an array of exactly 4 strings."
+            }
+          },
+          {
+            "skill": "formatter",
+            "inputs": [
+              "USER_QUERY",
+              "n:critic"
+            ],
+            "metadata": {
+              "label": "out"
+            }
+          }
+        ],
+        "cost": 0.0,
+        "elapsed_s": 7.224212169647217,
+        "provider": "openai",
+        "error": null
+      },
+      "_result_typed": true,
+      "id": "n:13"
+    },
+    {
+      "skill": "distiller",
+      "inputs": [
+        "USER_QUERY"
+      ],
+      "metadata": {
+        "label": "distill",
+        "question": "Extract birth_year, death_year, and contributions from the provided source."
+      },
+      "status": "complete",
+      "result": {
+        "success": true,
+        "agent_name": "distiller",
+        "output": {
+          "fields": {
+            "birth_year": "1916",
+            "death_year": "2001",
+            "contributions": [
+              "information theory",
+              "digital circuit design theory",
+              "cryptographic theory"
+            ]
+          },
+          "rationale": "Claude Shannon was born in 1916 and died in 2001; his contributions were listed as information theory, digital circuit design theory, and cryptographic theory."
+        },
+        "artifacts": [],
+        "successors": [],
+        "cost": 0.0,
+        "elapsed_s": 5.60905122756958,
+        "provider": "openai",
+        "error": null
+      },
+      "_result_typed": true,
+      "id": "n:14"
+    },
+    {
+      "skill": "critic",
+      "inputs": [
+        "n:14"
+      ],
+      "metadata": {
+        "label": "critic",
+        "question": "Fail unless the distiller JSON field contributions is an array of exactly 4 strings."
+      },
+      "status": "complete",
+      "result": {
+        "success": true,
+        "agent_name": "critic",
+        "output": {
+          "verdict": "fail",
+          "rationale": "The contributions field is an array of 3 strings instead of the required 4."
+        },
+        "artifacts": [],
+        "successors": [],
+        "cost": 0.0,
+        "elapsed_s": 3.8118627071380615,
+        "provider": "openai",
+        "error": null
+      },
+      "_result_typed": true,
+      "id": "n:15"
+    },
+    {
+      "skill": "formatter",
+      "inputs": [
+        "USER_QUERY",
+        "n:15"
+      ],
+      "metadata": {
+        "label": "out"
+      },
+      "status": "skipped",
+      "id": "n:16"
+    },
+    {
+      "skill": "planner",
+      "inputs": [
+        "USER_QUERY"
+      ],
+      "metadata": {
+        "failure_report": "critic failed target=n:14 child=n:16 rationale=The contributions field is an array of 3 strings instead of the required 4.",
+        "recovers": "n:14",
+        "recovery_reason": "critic_fail"
+      },
+      "status": "complete",
+      "result": {
+        "success": true,
+        "agent_name": "planner",
+        "output": {
+          "rationale": "Extract structured information from the provided source, then validate the contributions field for the required format.",
+          "nodes": [
+            {
+              "skill": "distiller",
+              "inputs": [
+                "USER_QUERY"
+              ],
+              "metadata": {
+                "label": "d1",
+                "question": "Extract birth_year, death_year, and contributions from the provided source."
+              }
+            },
+            {
+              "skill": "critic",
+              "inputs": [
+                "n:d1"
+              ],
+              "metadata": {
+                "label": "c1",
+                "question": "Fail unless the distiller JSON field contributions is an array of exactly 4 strings."
+              }
+            },
+            {
+              "skill": "formatter",
+              "inputs": [
+                "USER_QUERY",
+                "n:c1"
+              ],
+              "metadata": {
+                "label": "out"
+              }
+            }
+          ]
+        },
+        "artifacts": [],
+        "successors": [
+          {
+            "skill": "distiller",
+            "inputs": [
+              "USER_QUERY"
+            ],
+            "metadata": {
+              "label": "d1",
+              "question": "Extract birth_year, death_year, and contributions from the provided source."
+            }
+          },
+          {
+            "skill": "critic",
+            "inputs": [
+              "n:d1"
+            ],
+            "metadata": {
+              "label": "c1",
+              "question": "Fail unless the distiller JSON field contributions is an array of exactly 4 strings."
+            }
+          },
+          {
+            "skill": "formatter",
+            "inputs": [
+              "USER_QUERY",
+              "n:c1"
+            ],
+            "metadata": {
+              "label": "out"
+            }
+          }
+        ],
+        "cost": 0.0,
+        "elapsed_s": 6.727931499481201,
+        "provider": "openai",
+        "error": null
+      },
+      "_result_typed": true,
+      "id": "n:17"
+    },
+    {
+      "skill": "distiller",
+      "inputs": [
+        "USER_QUERY"
+      ],
+      "metadata": {
+        "label": "d1",
+        "question": "Extract birth_year, death_year, and contributions from the provided source."
+      },
+      "status": "complete",
+      "result": {
+        "success": true,
+        "agent_name": "distiller",
+        "output": {
+          "fields": {
+            "birth_year": "1916",
+            "death_year": "2001",
+            "contributions": [
+              "information theory",
+              "digital circuit design theory",
+              "cryptographic theory"
+            ]
+          },
+          "rationale": "Claude Shannon was born in 1916 and died in 2001; his contributions were listed as information theory, digital circuit design theory, and cryptographic theory."
+        },
+        "artifacts": [],
+        "successors": [],
+        "cost": 0.0,
+        "elapsed_s": 5.185022592544556,
+        "provider": "openai",
+        "error": null
+      },
+      "_result_typed": true,
+      "id": "n:18"
+    },
+    {
+      "skill": "critic",
+      "inputs": [
+        "n:18"
+      ],
+      "metadata": {
+        "label": "c1",
+        "question": "Fail unless the distiller JSON field contributions is an array of exactly 4 strings."
+      },
+      "status": "complete",
+      "result": {
+        "success": true,
+        "agent_name": "critic",
+        "output": {
+          "verdict": "fail",
+          "rationale": "The contributions field is an array of 3 strings instead of the required 4 strings."
+        },
+        "artifacts": [],
+        "successors": [],
+        "cost": 0.0,
+        "elapsed_s": 4.196461200714111,
+        "provider": "openai",
+        "error": null
+      },
+      "_result_typed": true,
+      "id": "n:19"
+    },
+    {
+      "skill": "formatter",
+      "inputs": [
+        "USER_QUERY",
+        "n:19"
+      ],
+      "metadata": {
+        "label": "out"
+      },
+      "status": "skipped",
+      "id": "n:20"
+    },
+    {
+      "skill": "planner",
+      "inputs": [
+        "USER_QUERY"
+      ],
+      "metadata": {
+        "failure_report": "critic failed target=n:18 child=n:20 rationale=The contributions field is an array of 3 strings instead of the required 4 strings.",
+        "recovers": "n:18",
+        "recovery_reason": "critic_fail"
+      },
+      "status": "complete",
+      "result": {
+        "success": true,
+        "agent_name": "planner",
+        "output": {
+          "rationale": "Extract structured fields from the provided source and ensure the contributions meet the specified criteria.",
+          "nodes": [
+            {
+              "skill": "distiller",
+              "inputs": [
+                "USER_QUERY"
+              ],
+              "metadata": {
+                "label": "d1",
+                "question": "Extract birth_year, death_year, and contributions from the provided source."
+              }
+            },
+            {
+              "skill": "critic",
+              "inputs": [
+                "n:d1"
+              ],
+              "metadata": {
+                "label": "c1",
+                "question": "Fail unless the distiller JSON field contributions is an array of exactly 4 strings."
+              }
+            },
+            {
+              "skill": "formatter",
+              "inputs": [
+                "USER_QUERY",
+                "n:c1"
+              ],
+              "metadata": {
+                "label": "out"
+              }
+            }
+          ]
+        },
+        "artifacts": [],
+        "successors": [
+          {
+            "skill": "distiller",
+            "inputs": [
+              "USER_QUERY"
+            ],
+            "metadata": {
+              "label": "d1",
+              "question": "Extract birth_year, death_year, and contributions from the provided source."
+            }
+          },
+          {
+            "skill": "critic",
+            "inputs": [
+              "n:d1"
+            ],
+            "metadata": {
+              "label": "c1",
+              "question": "Fail unless the distiller JSON field contributions is an array of exactly 4 strings."
+            }
+          },
+          {
+            "skill": "formatter",
+            "inputs": [
+              "USER_QUERY",
+              "n:c1"
+            ],
+            "metadata": {
+              "label": "out"
+            }
+          }
+        ],
+        "cost": 0.0,
+        "elapsed_s": 8.380094289779663,
+        "provider": "openai",
+        "error": null
+      },
+      "_result_typed": true,
+      "id": "n:21"
+    },
+    {
+      "skill": "distiller",
+      "inputs": [
+        "USER_QUERY"
+      ],
+      "metadata": {
+        "label": "d1",
+        "question": "Extract birth_year, death_year, and contributions from the provided source."
+      },
+      "status": "complete",
+      "result": {
+        "success": true,
+        "agent_name": "distiller",
+        "output": {
+          "fields": {
+            "birth_year": "1916",
+            "death_year": "2001",
+            "contributions": [
+              "information theory",
+              "digital circuit design theory",
+              "cryptographic theory"
+            ]
+          },
+          "rationale": "Claude Shannon was born in 1916 and died in 2001; his contributions were listed as information theory, digital circuit design theory, and cryptographic theory."
+        },
+        "artifacts": [],
+        "successors": [],
+        "cost": 0.0,
+        "elapsed_s": 5.129607439041138,
+        "provider": "openai",
+        "error": null
+      },
+      "_result_typed": true,
+      "id": "n:22"
+    },
+    {
+      "skill": "critic",
+      "inputs": [
+        "n:22"
+      ],
+      "metadata": {
+        "label": "c1",
+        "question": "Fail unless the distiller JSON field contributions is an array of exactly 4 strings."
+      },
+      "status": "complete",
+      "result": {
+        "success": true,
+        "agent_name": "critic",
+        "output": {
+          "verdict": "fail",
+          "rationale": "The contributions field is an array of 3 strings instead of the required 4."
+        },
+        "artifacts": [],
+        "successors": [],
+        "cost": 0.0,
+        "elapsed_s": 5.67502760887146,
+        "provider": "openai",
+        "error": null
+      },
+      "_result_typed": true,
+      "id": "n:23"
+    },
+    {
+      "skill": "formatter",
+      "inputs": [
+        "USER_QUERY",
+        "n:23"
+      ],
+      "metadata": {
+        "label": "out"
+      },
+      "status": "skipped",
+      "id": "n:24"
+    },
+    {
+      "skill": "planner",
+      "inputs": [
+        "USER_QUERY"
+      ],
+      "metadata": {
+        "failure_report": "critic failed target=n:22 child=n:24 rationale=The contributions field is an array of 3 strings instead of the required 4.",
+        "recovers": "n:22",
+        "recovery_reason": "critic_fail"
+      },
+      "status": "complete",
+      "result": {
+        "success": true,
+        "agent_name": "planner",
+        "output": {
+          "rationale": "Extract structured information from the source, validate the contributions field, and format the final output.",
+          "nodes": [
+            {
+              "skill": "distiller",
+              "inputs": [
+                "USER_QUERY"
+              ],
+              "metadata": {
+                "label": "d1",
+                "question": "Extract birth_year, death_year, and contributions from the provided source."
+              }
+            },
+            {
+              "skill": "critic",
+              "inputs": [
+                "n:d1"
+              ],
+              "metadata": {
+                "label": "c1",
+                "question": "Fail unless the distiller JSON field contributions is an array of exactly 4 strings."
+              }
+            },
+            {
+              "skill": "formatter",
+              "inputs": [
+                "USER_QUERY",
+                "n:c1"
+              ],
+              "metadata": {
+                "label": "out"
+              }
+            }
+          ]
+        },
+        "artifacts": [],
+        "successors": [
+          {
+            "skill": "distiller",
+            "inputs": [
+              "USER_QUERY"
+            ],
+            "metadata": {
+              "label": "d1",
+              "question": "Extract birth_year, death_year, and contributions from the provided source."
+            }
+          },
+          {
+            "skill": "critic",
+            "inputs": [
+              "n:d1"
+            ],
+            "metadata": {
+              "label": "c1",
+              "question": "Fail unless the distiller JSON field contributions is an array of exactly 4 strings."
+            }
+          },
+          {
+            "skill": "formatter",
+            "inputs": [
+              "USER_QUERY",
+              "n:c1"
+            ],
+            "metadata": {
+              "label": "out"
+            }
+          }
+        ],
+        "cost": 0.0,
+        "elapsed_s": 6.2207090854644775,
+        "provider": "openai",
+        "error": null
+      },
+      "_result_typed": true,
+      "id": "n:25"
+    },
+    {
+      "skill": "distiller",
+      "inputs": [
+        "USER_QUERY"
+      ],
+      "metadata": {
+        "label": "d1",
+        "question": "Extract birth_year, death_year, and contributions from the provided source."
+      },
+      "status": "complete",
+      "result": {
+        "success": true,
+        "agent_name": "distiller",
+        "output": {
+          "fields": {
+            "birth_year": "1916",
+            "death_year": "2001",
+            "contributions": [
+              "information theory",
+              "digital circuit design theory",
+              "cryptographic theory"
+            ]
+          },
+          "rationale": "Claude Shannon was born in 1916 and died in 2001; his contributions were listed as information theory, digital circuit design theory, and cryptographic theory."
+        },
+        "artifacts": [],
+        "successors": [],
+        "cost": 0.0,
+        "elapsed_s": 4.761026620864868,
+        "provider": "openai",
+        "error": null
+      },
+      "_result_typed": true,
+      "id": "n:26"
+    },
+    {
+      "skill": "critic",
+      "inputs": [
+        "n:26"
+      ],
+      "metadata": {
+        "label": "c1",
+        "question": "Fail unless the distiller JSON field contributions is an array of exactly 4 strings."
+      },
+      "status": "complete",
+      "result": {
+        "success": true,
+        "agent_name": "critic",
+        "output": {
+          "verdict": "fail",
+          "rationale": "The contributions field is an array of 3 strings instead of the required 4."
+        },
+        "artifacts": [],
+        "successors": [],
+        "cost": 0.0,
+        "elapsed_s": 3.8685336112976074,
+        "provider": "openai",
+        "error": null
+      },
+      "_result_typed": true,
+      "id": "n:27"
+    },
+    {
+      "skill": "formatter",
+      "inputs": [
+        "USER_QUERY",
+        "n:27"
+      ],
+      "metadata": {
+        "label": "out"
+      },
+      "status": "skipped",
+      "id": "n:28"
+    },
+    {
+      "skill": "planner",
+      "inputs": [
+        "USER_QUERY"
+      ],
+      "metadata": {
+        "failure_report": "critic failed target=n:26 child=n:28 rationale=The contributions field is an array of 3 strings instead of the required 4.",
+        "recovers": "n:26",
+        "recovery_reason": "critic_fail"
+      },
+      "status": "complete",
+      "result": {
+        "success": true,
+        "agent_name": "planner",
+        "output": {
+          "rationale": "Extract the required fields from the source and ensure the contributions meet the specified criteria.",
+          "nodes": [
+            {
+              "skill": "distiller",
+              "inputs": [
+                "USER_QUERY"
+              ],
+              "metadata": {
+                "label": "d1",
+                "question": "Extract birth_year, death_year, and contributions from the provided source."
+              }
+            },
+            {
+              "skill": "critic",
+              "inputs": [
+                "n:d1"
+              ],
+              "metadata": {
+                "label": "c1",
+                "question": "Fail unless the distiller JSON field contributions is an array of exactly 4 strings."
+              }
+            },
+            {
+              "skill": "formatter",
+              "inputs": [
+                "USER_QUERY",
+                "n:c1"
+              ],
+              "metadata": {
+                "label": "out"
+              }
+            }
+          ]
+        },
+        "artifacts": [],
+        "successors": [
+          {
+            "skill": "distiller",
+            "inputs": [
+              "USER_QUERY"
+            ],
+            "metadata": {
+              "label": "d1",
+              "question": "Extract birth_year, death_year, and contributions from the provided source."
+            }
+          },
+          {
+            "skill": "critic",
+            "inputs": [
+              "n:d1"
+            ],
+            "metadata": {
+              "label": "c1",
+              "question": "Fail unless the distiller JSON field contributions is an array of exactly 4 strings."
+            }
+          },
+          {
+            "skill": "formatter",
+            "inputs": [
+              "USER_QUERY",
+              "n:c1"
+            ],
+            "metadata": {
+              "label": "out"
+            }
+          }
+        ],
+        "cost": 0.0,
+        "elapsed_s": 5.772132396697998,
+        "provider": "openai",
+        "error": null
+      },
+      "_result_typed": true,
+      "id": "n:29"
+    },
+    {
+      "skill": "distiller",
+      "inputs": [
+        "USER_QUERY"
+      ],
+      "metadata": {
+        "label": "d1",
+        "question": "Extract birth_year, death_year, and contributions from the provided source."
+      },
+      "status": "complete",
+      "result": {
+        "success": true,
+        "agent_name": "distiller",
+        "output": {
+          "fields": {
+            "birth_year": "1916",
+            "death_year": "2001",
+            "contributions": [
+              "information theory",
+              "digital circuit design theory",
+              "cryptographic theory"
+            ]
+          },
+          "rationale": "Claude Shannon was born in 1916 and died in 2001; his contributions were listed as information theory, digital circuit design theory, and cryptographic theory."
+        },
+        "artifacts": [],
+        "successors": [],
+        "cost": 0.0,
+        "elapsed_s": 4.876214981079102,
+        "provider": "openai",
+        "error": null
+      },
+      "_result_typed": true,
+      "id": "n:30"
+    },
+    {
+      "skill": "critic",
+      "inputs": [
+        "n:30"
+      ],
+      "metadata": {
+        "label": "c1",
+        "question": "Fail unless the distiller JSON field contributions is an array of exactly 4 strings."
+      },
+      "status": "complete",
+      "result": {
+        "success": true,
+        "agent_name": "critic",
+        "output": {
+          "verdict": "fail",
+          "rationale": "The contributions field is an array of 3 strings instead of the required 4 strings."
+        },
+        "artifacts": [],
+        "successors": [],
+        "cost": 0.0,
+        "elapsed_s": 5.389128684997559,
+        "provider": "openai",
+        "error": null
+      },
+      "_result_typed": true,
+      "id": "n:31"
+    },
+    {
+      "skill": "formatter",
+      "inputs": [
+        "USER_QUERY",
+        "n:31"
+      ],
+      "metadata": {
+        "label": "out"
+      },
+      "status": "skipped",
+      "id": "n:32"
+    },
+    {
+      "skill": "planner",
+      "inputs": [
+        "USER_QUERY"
+      ],
+      "metadata": {
+        "failure_report": "critic failed target=n:30 child=n:32 rationale=The contributions field is an array of 3 strings instead of the required 4 strings.",
+        "recovers": "n:30",
+        "recovery_reason": "critic_fail"
+      },
+      "status": "complete",
+      "result": {
+        "success": true,
+        "agent_name": "planner",
+        "output": {
+          "rationale": "Extract the required fields from the source text, then validate the contributions array before formatting the final output.",
+          "nodes": [
+            {
+              "skill": "distiller",
+              "inputs": [
+                "USER_QUERY"
+              ],
+              "metadata": {
+                "label": "d1",
+                "question": "Extract birth_year, death_year, and contributions from the source."
+              }
+            },
+            {
+              "skill": "critic",
+              "inputs": [
+                "n:d1"
+              ],
+              "metadata": {
+                "label": "c1",
+                "question": "Fail unless the contributions field is an array of exactly 4 strings."
+              }
+            },
+            {
+              "skill": "formatter",
+              "inputs": [
+                "USER_QUERY",
+                "n:c1"
+              ],
+              "metadata": {
+                "label": "out"
+              }
+            }
+          ]
+        },
+        "artifacts": [],
+        "successors": [
+          {
+            "skill": "distiller",
+            "inputs": [
+              "USER_QUERY"
+            ],
+            "metadata": {
+              "label": "d1",
+              "question": "Extract birth_year, death_year, and contributions from the source."
+            }
+          },
+          {
+            "skill": "critic",
+            "inputs": [
+              "n:d1"
+            ],
+            "metadata": {
+              "label": "c1",
+              "question": "Fail unless the contributions field is an array of exactly 4 strings."
+            }
+          },
+          {
+            "skill": "formatter",
+            "inputs": [
+              "USER_QUERY",
+              "n:c1"
+            ],
+            "metadata": {
+              "label": "out"
+            }
+          }
+        ],
+        "cost": 0.0,
+        "elapsed_s": 5.9787938594818115,
+        "provider": "openai",
+        "error": null
+      },
+      "_result_typed": true,
+      "id": "n:33"
+    },
+    {
+      "skill": "distiller",
+      "inputs": [
+        "USER_QUERY"
+      ],
+      "metadata": {
+        "label": "d1",
+        "question": "Extract birth_year, death_year, and contributions from the source."
+      },
+      "status": "complete",
+      "result": {
+        "success": true,
+        "agent_name": "distiller",
+        "output": {
+          "fields": {
+            "birth_year": "1916",
+            "death_year": "2001",
+            "contributions": [
+              "information theory",
+              "digital circuit design theory",
+              "cryptographic theory"
+            ]
+          },
+          "rationale": "Claude Shannon was born in 1916 and died in 2001; his contributions were listed as information theory, digital circuit design theory, and cryptographic theory."
+        },
+        "artifacts": [],
+        "successors": [],
+        "cost": 0.0,
+        "elapsed_s": 4.858476638793945,
+        "provider": "openai",
+        "error": null
+      },
+      "_result_typed": true,
+      "id": "n:34"
+    },
+    {
+      "skill": "critic",
+      "inputs": [
+        "n:34"
+      ],
+      "metadata": {
+        "label": "c1",
+        "question": "Fail unless the contributions field is an array of exactly 4 strings."
+      },
+      "status": "complete",
+      "result": {
+        "success": true,
+        "agent_name": "critic",
+        "output": {
+          "verdict": "fail",
+          "rationale": "The contributions field is an array of only 3 strings instead of the required 4."
+        },
+        "artifacts": [],
+        "successors": [],
+        "cost": 0.0,
+        "elapsed_s": 3.8010663986206055,
+        "provider": "openai",
+        "error": null
+      },
+      "_result_typed": true,
+      "id": "n:35"
+    },
+    {
+      "skill": "formatter",
+      "inputs": [
+        "USER_QUERY",
+        "n:35"
+      ],
+      "metadata": {
+        "label": "out"
+      },
+      "status": "skipped",
+      "id": "n:36"
+    },
+    {
+      "skill": "planner",
+      "inputs": [
+        "USER_QUERY"
+      ],
+      "metadata": {
+        "failure_report": "critic failed target=n:34 child=n:36 rationale=The contributions field is an array of only 3 strings instead of the required 4.",
+        "recovers": "n:34",
+        "recovery_reason": "critic_fail"
+      },
+      "status": "complete",
+      "result": {
+        "success": true,
+        "agent_name": "planner",
+        "output": {
+          "rationale": "Extract the required fields from the source text, then validate the contributions array.",
+          "nodes": [
+            {
+              "skill": "distiller",
+              "inputs": [
+                "USER_QUERY"
+              ],
+              "metadata": {
+                "label": "d1",
+                "question": "Extract birth_year, death_year, and contributions from the provided source."
+              }
+            },
+            {
+              "skill": "critic",
+              "inputs": [
+                "n:d1"
+              ],
+              "metadata": {
+                "label": "c1",
+                "question": "Fail unless the distiller JSON field contributions is an array of exactly 4 strings."
+              }
+            },
+            {
+              "skill": "formatter",
+              "inputs": [
+                "USER_QUERY",
+                "n:c1"
+              ],
+              "metadata": {
+                "label": "out"
+              }
+            }
+          ]
+        },
+        "artifacts": [],
+        "successors": [
+          {
+            "skill": "distiller",
+            "inputs": [
+              "USER_QUERY"
+            ],
+            "metadata": {
+              "label": "d1",
+              "question": "Extract birth_year, death_year, and contributions from the provided source."
+            }
+          },
+          {
+            "skill": "critic",
+            "inputs": [
+              "n:d1"
+            ],
+            "metadata": {
+              "label": "c1",
+              "question": "Fail unless the distiller JSON field contributions is an array of exactly 4 strings."
+            }
+          },
+          {
+            "skill": "formatter",
+            "inputs": [
+              "USER_QUERY",
+              "n:c1"
+            ],
+            "metadata": {
+              "label": "out"
+            }
+          }
+        ],
+        "cost": 0.0,
+        "elapsed_s": 6.369534730911255,
+        "provider": "openai",
+        "error": null
+      },
+      "_result_typed": true,
+      "id": "n:37"
+    },
+    {
+      "skill": "distiller",
+      "inputs": [
+        "USER_QUERY"
+      ],
+      "metadata": {
+        "label": "d1",
+        "question": "Extract birth_year, death_year, and contributions from the provided source."
+      },
+      "status": "complete",
+      "result": {
+        "success": true,
+        "agent_name": "distiller",
+        "output": {
+          "fields": {
+            "birth_year": "1916",
+            "death_year": "2001",
+            "contributions": [
+              "information theory",
+              "digital circuit design theory",
+              "cryptographic theory"
+            ]
+          },
+          "rationale": "Claude Shannon was born in 1916 and died in 2001; his contributions were listed as information theory, digital circuit design theory, and cryptographic theory."
+        },
+        "artifacts": [],
+        "successors": [],
+        "cost": 0.0,
+        "elapsed_s": 4.814082622528076,
+        "provider": "openai",
+        "error": null
+      },
+      "_result_typed": true,
+      "id": "n:38"
+    },
+    {
+      "skill": "critic",
+      "inputs": [
+        "n:38"
+      ],
+      "metadata": {
+        "label": "c1",
+        "question": "Fail unless the distiller JSON field contributions is an array of exactly 4 strings."
+      },
+      "status": "complete",
+      "result": {
+        "success": true,
+        "agent_name": "critic",
+        "output": {
+          "verdict": "fail",
+          "rationale": "The contributions field is an array of 3 strings instead of the required 4."
+        },
+        "artifacts": [],
+        "successors": [],
+        "cost": 0.0,
+        "elapsed_s": 3.7643282413482666,
+        "provider": "openai",
+        "error": null
+      },
+      "_result_typed": true,
+      "id": "n:39"
+    },
+    {
+      "skill": "formatter",
+      "inputs": [
+        "USER_QUERY",
+        "n:39"
+      ],
+      "metadata": {
+        "label": "out"
+      },
+      "status": "skipped",
+      "id": "n:40"
+    },
+    {
+      "skill": "planner",
+      "inputs": [
+        "USER_QUERY"
+      ],
+      "metadata": {
+        "failure_report": "critic failed target=n:38 child=n:40 rationale=The contributions field is an array of 3 strings instead of the required 4.",
+        "recovers": "n:38",
+        "recovery_reason": "critic_fail"
+      },
+      "status": "complete",
+      "result": {
+        "success": true,
+        "agent_name": "planner",
+        "output": {
+          "rationale": "Extract structured data from the provided source, then validate the contributions field.",
+          "nodes": [
+            {
+              "skill": "distiller",
+              "inputs": [
+                "USER_QUERY"
+              ],
+              "metadata": {
+                "label": "d1",
+                "question": "Extract birth_year, death_year, and contributions from the source."
+              }
+            },
+            {
+              "skill": "critic",
+              "inputs": [
+                "n:d1"
+              ],
+              "metadata": {
+                "label": "c1",
+                "question": "Fail unless the distiller JSON field contributions is an array of exactly 4 strings."
+              }
+            },
+            {
+              "skill": "formatter",
+              "inputs": [
+                "USER_QUERY",
+                "n:c1"
+              ],
+              "metadata": {
+                "label": "out"
+              }
+            }
+          ]
+        },
+        "artifacts": [],
+        "successors": [
+          {
+            "skill": "distiller",
+            "inputs": [
+              "USER_QUERY"
+            ],
+            "metadata": {
+              "label": "d1",
+              "question": "Extract birth_year, death_year, and contributions from the source."
+            }
+          },
+          {
+            "skill": "critic",
+            "inputs": [
+              "n:d1"
+            ],
+            "metadata": {
+              "label": "c1",
+              "question": "Fail unless the distiller JSON field contributions is an array of exactly 4 strings."
+            }
+          },
+          {
+            "skill": "formatter",
+            "inputs": [
+              "USER_QUERY",
+              "n:c1"
+            ],
+            "metadata": {
+              "label": "out"
+            }
+          }
+        ],
+        "cost": 0.0,
+        "elapsed_s": 6.199915409088135,
+        "provider": "openai",
+        "error": null
+      },
+      "_result_typed": true,
+      "id": "n:41"
+    },
+    {
+      "skill": "distiller",
+      "inputs": [
+        "USER_QUERY"
+      ],
+      "metadata": {
+        "label": "d1",
+        "question": "Extract birth_year, death_year, and contributions from the source."
+      },
+      "status": "complete",
+      "result": {
+        "success": true,
+        "agent_name": "distiller",
+        "output": {
+          "fields": {
+            "birth_year": "1916",
+            "death_year": "2001",
+            "contributions": [
+              "information theory",
+              "digital circuit design theory",
+              "cryptographic theory"
+            ]
+          },
+          "rationale": "Claude Shannon was born in 1916 and died in 2001; his contributions were listed as information theory, digital circuit design theory, and cryptographic theory."
+        },
+        "artifacts": [],
+        "successors": [],
+        "cost": 0.0,
+        "elapsed_s": 5.366344451904297,
+        "provider": "openai",
+        "error": null
+      },
+      "_result_typed": true,
+      "id": "n:42"
+    },
+    {
+      "skill": "critic",
+      "inputs": [
+        "n:42"
+      ],
+      "metadata": {
+        "label": "c1",
+        "question": "Fail unless the distiller JSON field contributions is an array of exactly 4 strings."
+      },
+      "status": "complete",
+      "result": {
+        "success": true,
+        "agent_name": "critic",
+        "output": {
+          "verdict": "fail",
+          "rationale": "The contributions field is an array of 3 strings instead of the required 4."
+        },
+        "artifacts": [],
+        "successors": [],
+        "cost": 0.0,
+        "elapsed_s": 3.441692590713501,
+        "provider": "openai",
+        "error": null
+      },
+      "_result_typed": true,
+      "id": "n:43"
+    },
+    {
+      "skill": "formatter",
+      "inputs": [
+        "USER_QUERY",
+        "n:43"
+      ],
+      "metadata": {
+        "label": "out"
+      },
+      "status": "skipped",
+      "id": "n:44"
+    },
+    {
+      "skill": "planner",
+      "inputs": [
+        "USER_QUERY"
+      ],
+      "metadata": {
+        "failure_report": "critic failed target=n:42 child=n:44 rationale=The contributions field is an array of 3 strings instead of the required 4.",
+        "recovers": "n:42",
+        "recovery_reason": "critic_fail"
+      },
+      "status": "complete",
+      "result": {
+        "success": true,
+        "agent_name": "planner",
+        "output": {
+          "rationale": "Extract structured information from the source and validate the contributions.",
+          "nodes": [
+            {
+              "skill": "distiller",
+              "inputs": [
+                "USER_QUERY"
+              ],
+              "metadata": {
+                "label": "d1",
+                "question": "Extract birth_year, death_year, and contributions from the provided source."
+              }
+            },
+            {
+              "skill": "critic",
+              "inputs": [
+                "n:d1"
+              ],
+              "metadata": {
+                "label": "c1",
+                "question": "Fail unless the distiller JSON field contributions is an array of exactly 4 strings."
+              }
+            },
+            {
+              "skill": "formatter",
+              "inputs": [
+                "USER_QUERY",
+                "n:c1"
+              ],
+              "metadata": {
+                "label": "out"
+              }
+            }
+          ]
+        },
+        "artifacts": [],
+        "successors": [
+          {
+            "skill": "distiller",
+            "inputs": [
+              "USER_QUERY"
+            ],
+            "metadata": {
+              "label": "d1",
+              "question": "Extract birth_year, death_year, and contributions from the provided source."
+            }
+          },
+          {
+            "skill": "critic",
+            "inputs": [
+              "n:d1"
+            ],
+            "metadata": {
+              "label": "c1",
+              "question": "Fail unless the distiller JSON field contributions is an array of exactly 4 strings."
+            }
+          },
+          {
+            "skill": "formatter",
+            "inputs": [
+              "USER_QUERY",
+              "n:c1"
+            ],
+            "metadata": {
+              "label": "out"
+            }
+          }
+        ],
+        "cost": 0.0,
+        "elapsed_s": 6.171642065048218,
+        "provider": "openai",
+        "error": null
+      },
+      "_result_typed": true,
+      "id": "n:45"
+    },
+    {
+      "skill": "distiller",
+      "inputs": [
+        "USER_QUERY"
+      ],
+      "metadata": {
+        "label": "d1",
+        "question": "Extract birth_year, death_year, and contributions from the provided source."
+      },
+      "status": "complete",
+      "result": {
+        "success": true,
+        "agent_name": "distiller",
+        "output": {
+          "fields": {
+            "birth_year": "1916",
+            "death_year": "2001",
+            "contributions": [
+              "information theory",
+              "digital circuit design theory",
+              "cryptographic theory"
+            ]
+          },
+          "rationale": "Claude Shannon was born in 1916 and died in 2001; his contributions were mentioned in the source, but only three were provided instead of four."
+        },
+        "artifacts": [],
+        "successors": [],
+        "cost": 0.0,
+        "elapsed_s": 6.81302809715271,
+        "provider": "openai",
+        "error": null
+      },
+      "_result_typed": true,
+      "id": "n:46"
+    },
+    {
+      "skill": "critic",
+      "inputs": [
+        "n:46"
+      ],
+      "metadata": {
+        "label": "c1",
+        "question": "Fail unless the distiller JSON field contributions is an array of exactly 4 strings."
+      },
+      "status": "complete",
+      "result": {
+        "success": true,
+        "agent_name": "critic",
+        "output": {
+          "verdict": "fail",
+          "rationale": "The contributions field contains only three strings instead of the required four."
+        },
+        "artifacts": [],
+        "successors": [],
+        "cost": 0.0,
+        "elapsed_s": 4.0414135456085205,
+        "provider": "openai",
+        "error": null
+      },
+      "_result_typed": true,
+      "id": "n:47"
+    },
+    {
+      "skill": "formatter",
+      "inputs": [
+        "USER_QUERY",
+        "n:47"
+      ],
+      "metadata": {
+        "label": "out"
+      },
+      "status": "skipped",
+      "id": "n:48"
+    },
+    {
+      "skill": "planner",
+      "inputs": [
+        "USER_QUERY"
+      ],
+      "metadata": {
+        "failure_report": "critic failed target=n:46 child=n:48 rationale=The contributions field contains only three strings instead of the required four.",
+        "recovers": "n:46",
+        "recovery_reason": "critic_fail"
+      },
+      "status": "complete",
+      "result": {
+        "success": true,
+        "agent_name": "planner",
+        "output": {
+          "rationale": "Extract the required fields from the source and validate the contributions.",
+          "nodes": [
+            {
+              "skill": "distiller",
+              "inputs": [
+                "USER_QUERY"
+              ],
+              "metadata": {
+                "label": "d1",
+                "question": "Extract birth_year, death_year, and contributions from the provided source."
+              }
+            },
+            {
+              "skill": "critic",
+              "inputs": [
+                "n:d1"
+              ],
+              "metadata": {
+                "label": "c1",
+                "question": "Fail unless the distiller JSON field contributions is an array of exactly 4 strings."
+              }
+            },
+            {
+              "skill": "formatter",
+              "inputs": [
+                "USER_QUERY",
+                "n:c1"
+              ],
+              "metadata": {
+                "label": "out"
+              }
+            }
+          ]
+        },
+        "artifacts": [],
+        "successors": [
+          {
+            "skill": "distiller",
+            "inputs": [
+              "USER_QUERY"
+            ],
+            "metadata": {
+              "label": "d1",
+              "question": "Extract birth_year, death_year, and contributions from the provided source."
+            }
+          },
+          {
+            "skill": "critic",
+            "inputs": [
+              "n:d1"
+            ],
+            "metadata": {
+              "label": "c1",
+              "question": "Fail unless the distiller JSON field contributions is an array of exactly 4 strings."
+            }
+          },
+          {
+            "skill": "formatter",
+            "inputs": [
+              "USER_QUERY",
+              "n:c1"
+            ],
+            "metadata": {
+              "label": "out"
+            }
+          }
+        ],
+        "cost": 0.0,
+        "elapsed_s": 5.733240365982056,
+        "provider": "openai",
+        "error": null
+      },
+      "_result_typed": true,
+      "id": "n:49"
+    },
+    {
+      "skill": "distiller",
+      "inputs": [
+        "USER_QUERY"
+      ],
+      "metadata": {
+        "label": "d1",
+        "question": "Extract birth_year, death_year, and contributions from the provided source."
+      },
+      "status": "complete",
+      "result": {
+        "success": true,
+        "agent_name": "distiller",
+        "output": {
+          "fields": {
+            "birth_year": "1916",
+            "death_year": "2001",
+            "contributions": [
+              "information theory",
+              "digital circuit design theory",
+              "cryptographic theory"
+            ]
+          },
+          "rationale": "Claude Shannon was born in 1916 and died in 2001; his contributions were listed as information theory, digital circuit design theory, and cryptographic theory."
+        },
+        "artifacts": [],
+        "successors": [],
+        "cost": 0.0,
+        "elapsed_s": 5.329101324081421,
+        "provider": "openai",
+        "error": null
+      },
+      "_result_typed": true,
+      "id": "n:50"
+    },
+    {
+      "skill": "critic",
+      "inputs": [
+        "n:50"
+      ],
+      "metadata": {
+        "label": "c1",
+        "question": "Fail unless the distiller JSON field contributions is an array of exactly 4 strings."
+      },
+      "status": "complete",
+      "result": {
+        "success": true,
+        "agent_name": "critic",
+        "output": {
+          "verdict": "fail",
+          "rationale": "The contributions field is an array of 3 strings instead of the required 4."
+        },
+        "artifacts": [],
+        "successors": [],
+        "cost": 0.0,
+        "elapsed_s": 3.640451192855835,
+        "provider": "openai",
+        "error": null
+      },
+      "_result_typed": true,
+      "id": "n:51"
+    },
+    {
+      "skill": "formatter",
+      "inputs": [
+        "USER_QUERY",
+        "n:51"
+      ],
+      "metadata": {
+        "label": "out"
+      },
+      "status": "skipped",
+      "id": "n:52"
+    },
+    {
+      "skill": "planner",
+      "inputs": [
+        "USER_QUERY"
+      ],
+      "metadata": {
+        "failure_report": "critic failed target=n:50 child=n:52 rationale=The contributions field is an array of 3 strings instead of the required 4.",
+        "recovers": "n:50",
+        "recovery_reason": "critic_fail"
+      },
+      "status": "complete",
+      "result": {
+        "success": true,
+        "agent_name": "planner",
+        "output": {
+          "rationale": "Extract the required information from the source and validate the contributions.",
+          "nodes": [
+            {
+              "skill": "distiller",
+              "inputs": [
+                "USER_QUERY"
+              ],
+              "metadata": {
+                "label": "d1",
+                "question": "Extract birth_year, death_year, and contributions from the provided source."
+              }
+            },
+            {
+              "skill": "critic",
+              "inputs": [
+                "n:d1"
+              ],
+              "metadata": {
+                "label": "c1",
+                "question": "Fail unless the distiller JSON field contributions is an array of exactly 4 strings."
+              }
+            },
+            {
+              "skill": "formatter",
+              "inputs": [
+                "USER_QUERY",
+                "n:c1"
+              ],
+              "metadata": {
+                "label": "out"
+              }
+            }
+          ]
+        },
+        "artifacts": [],
+        "successors": [
+          {
+            "skill": "distiller",
+            "inputs": [
+              "USER_QUERY"
+            ],
+            "metadata": {
+              "label": "d1",
+              "question": "Extract birth_year, death_year, and contributions from the provided source."
+            }
+          },
+          {
+            "skill": "critic",
+            "inputs": [
+              "n:d1"
+            ],
+            "metadata": {
+              "label": "c1",
+              "question": "Fail unless the distiller JSON field contributions is an array of exactly 4 strings."
+            }
+          },
+          {
+            "skill": "formatter",
+            "inputs": [
+              "USER_QUERY",
+              "n:c1"
+            ],
+            "metadata": {
+              "label": "out"
+            }
+          }
+        ],
+        "cost": 0.0,
+        "elapsed_s": 5.451408386230469,
+        "provider": "openai",
+        "error": null
+      },
+      "_result_typed": true,
+      "id": "n:53"
+    },
+    {
+      "skill": "distiller",
+      "inputs": [
+        "USER_QUERY"
+      ],
+      "metadata": {
+        "label": "d1",
+        "question": "Extract birth_year, death_year, and contributions from the provided source."
+      },
+      "status": "complete",
+      "result": {
+        "success": true,
+        "agent_name": "distiller",
+        "output": {
+          "fields": {
+            "birth_year": "1916",
+            "death_year": "2001",
+            "contributions": [
+              "information theory",
+              "digital circuit design theory",
+              "cryptographic theory"
+            ]
+          },
+          "rationale": "Claude Shannon was born in 1916 and died in 2001; his contributions were mentioned in the source, but only three were provided instead of four."
+        },
+        "artifacts": [],
+        "successors": [],
+        "cost": 0.0,
+        "elapsed_s": 6.158354043960571,
+        "provider": "openai",
+        "error": null
+      },
+      "_result_typed": true,
+      "id": "n:54"
+    },
+    {
+      "skill": "critic",
+      "inputs": [
+        "n:54"
+      ],
+      "metadata": {
+        "label": "c1",
+        "question": "Fail unless the distiller JSON field contributions is an array of exactly 4 strings."
+      },
+      "status": "complete",
+      "result": {
+        "success": true,
+        "agent_name": "critic",
+        "output": {
+          "verdict": "fail",
+          "rationale": "The contributions field contains only three strings instead of the required four."
+        },
+        "artifacts": [],
+        "successors": [],
+        "cost": 0.0,
+        "elapsed_s": 3.5426294803619385,
+        "provider": "openai",
+        "error": null
+      },
+      "_result_typed": true,
+      "id": "n:55"
+    },
+    {
+      "skill": "formatter",
+      "inputs": [
+        "USER_QUERY",
+        "n:55"
+      ],
+      "metadata": {
+        "label": "out"
+      },
+      "status": "skipped",
+      "id": "n:56"
+    },
+    {
+      "skill": "planner",
+      "inputs": [
+        "USER_QUERY"
+      ],
+      "metadata": {
+        "failure_report": "critic failed target=n:54 child=n:56 rationale=The contributions field contains only three strings instead of the required four.",
+        "recovers": "n:54",
+        "recovery_reason": "critic_fail"
+      },
+      "status": "complete",
+      "result": {
+        "success": true,
+        "agent_name": "planner",
+        "output": {
+          "rationale": "Extract the required fields from the provided source, then validate the contributions array before formatting the final output.",
+          "nodes": [
+            {
+              "skill": "distiller",
+              "inputs": [
+                "USER_QUERY"
+              ],
+              "metadata": {
+                "label": "distill",
+                "question": "Extract birth_year, death_year, and contributions from the source."
+              }
+            },
+            {
+              "skill": "critic",
+              "inputs": [
+                "n:distill"
+              ],
+              "metadata": {
+                "label": "critic",
+                "question": "Fail unless the contributions field is an array of exactly 4 strings."
+              }
+            },
+            {
+              "skill": "formatter",
+              "inputs": [
+                "USER_QUERY",
+                "n:critic"
+              ],
+              "metadata": {
+                "label": "out"
+              }
+            }
+          ]
+        },
+        "artifacts": [],
+        "successors": [
+          {
+            "skill": "distiller",
+            "inputs": [
+              "USER_QUERY"
+            ],
+            "metadata": {
+              "label": "distill",
+              "question": "Extract birth_year, death_year, and contributions from the source."
+            }
+          },
+          {
+            "skill": "critic",
+            "inputs": [
+              "n:distill"
+            ],
+            "metadata": {
+              "label": "critic",
+              "question": "Fail unless the contributions field is an array of exactly 4 strings."
+            }
+          },
+          {
+            "skill": "formatter",
+            "inputs": [
+              "USER_QUERY",
+              "n:critic"
+            ],
+            "metadata": {
+              "label": "out"
+            }
+          }
+        ],
+        "cost": 0.0,
+        "elapsed_s": 7.100508451461792,
+        "provider": "openai",
+        "error": null
+      },
+      "_result_typed": true,
+      "id": "n:57"
+    },
+    {
+      "skill": "distiller",
+      "inputs": [
+        "USER_QUERY"
+      ],
+      "metadata": {
+        "label": "distill",
+        "question": "Extract birth_year, death_year, and contributions from the source."
+      },
+      "status": "complete",
+      "result": {
+        "success": true,
+        "agent_name": "distiller",
+        "output": {
+          "fields": {
+            "birth_year": "1916",
+            "death_year": "2001",
+            "contributions": [
+              "information theory",
+              "digital circuit design theory",
+              "cryptographic theory"
+            ]
+          },
+          "rationale": "Claude Shannon was born in 1916 and died in 2001; his contributions were listed as information theory, digital circuit design theory, and cryptographic theory."
+        },
+        "artifacts": [],
+        "successors": [],
+        "cost": 0.0,
+        "elapsed_s": 5.413222312927246,
+        "provider": "openai",
+        "error": null
+      },
+      "_result_typed": true,
+      "id": "n:58"
+    },
+    {
+      "skill": "critic",
+      "inputs": [
+        "n:58"
+      ],
+      "metadata": {
+        "label": "critic",
+        "question": "Fail unless the contributions field is an array of exactly 4 strings."
+      },
+      "status": "complete",
+      "result": {
+        "success": true,
+        "agent_name": "critic",
+        "output": {
+          "verdict": "fail",
+          "rationale": "The contributions field is an array of only 3 strings instead of the required 4."
+        },
+        "artifacts": [],
+        "successors": [],
+        "cost": 0.0,
+        "elapsed_s": 3.658379554748535,
+        "provider": "openai",
+        "error": null
+      },
+      "_result_typed": true,
+      "id": "n:59"
+    },
+    {
+      "skill": "formatter",
+      "inputs": [
+        "USER_QUERY",
+        "n:59"
+      ],
+      "metadata": {
+        "label": "out"
+      },
+      "status": "skipped",
+      "id": "n:60"
+    },
+    {
+      "skill": "planner",
+      "inputs": [
+        "USER_QUERY"
+      ],
+      "metadata": {
+        "failure_report": "critic failed target=n:58 child=n:60 rationale=The contributions field is an array of only 3 strings instead of the required 4.",
+        "recovers": "n:58",
+        "recovery_reason": "critic_fail"
+      },
+      "status": "complete",
+      "result": {
+        "success": true,
+        "agent_name": "planner",
+        "output": {
+          "rationale": "Extract structured data from the provided source, then validate the contributions array size.",
+          "nodes": [
+            {
+              "skill": "distiller",
+              "inputs": [
+                "USER_QUERY"
+              ],
+              "metadata": {
+                "label": "d1",
+                "question": "Extract birth_year, death_year, and contributions from the source."
+              }
+            },
+            {
+              "skill": "critic",
+              "inputs": [
+                "n:d1"
+              ],
+              "metadata": {
+                "label": "c1",
+                "question": "Fail unless the contributions field is an array of exactly 4 strings."
+              }
+            },
+            {
+              "skill": "formatter",
+              "inputs": [
+                "USER_QUERY",
+                "n:c1"
+              ],
+              "metadata": {
+                "label": "out"
+              }
+            }
+          ]
+        },
+        "artifacts": [],
+        "successors": [
+          {
+            "skill": "distiller",
+            "inputs": [
+              "USER_QUERY"
+            ],
+            "metadata": {
+              "label": "d1",
+              "question": "Extract birth_year, death_year, and contributions from the source."
+            }
+          },
+          {
+            "skill": "critic",
+            "inputs": [
+              "n:d1"
+            ],
+            "metadata": {
+              "label": "c1",
+              "question": "Fail unless the contributions field is an array of exactly 4 strings."
+            }
+          },
+          {
+            "skill": "formatter",
+            "inputs": [
+              "USER_QUERY",
+              "n:c1"
+            ],
+            "metadata": {
+              "label": "out"
+            }
+          }
+        ],
+        "cost": 0.0,
+        "elapsed_s": 6.392958402633667,
+        "provider": "openai",
+        "error": null
+      },
+      "_result_typed": true,
+      "id": "n:61"
+    },
+    {
+      "skill": "distiller",
+      "inputs": [
+        "USER_QUERY"
+      ],
+      "metadata": {
+        "label": "d1",
+        "question": "Extract birth_year, death_year, and contributions from the source."
+      },
+      "status": "complete",
+      "result": {
+        "success": true,
+        "agent_name": "distiller",
+        "output": {
+          "fields": {
+            "birth_year": "1916",
+            "death_year": "2001",
+            "contributions": [
+              "information theory",
+              "digital circuit design theory",
+              "cryptographic theory"
+            ]
+          },
+          "rationale": "Claude Shannon was born in 1916 and died in 2001; his contributions were listed as information theory, digital circuit design theory, and cryptographic theory."
+        },
+        "artifacts": [],
+        "successors": [],
+        "cost": 0.0,
+        "elapsed_s": 5.258990526199341,
+        "provider": "openai",
+        "error": null
+      },
+      "_result_typed": true,
+      "id": "n:62"
+    },
+    {
+      "skill": "critic",
+      "inputs": [
+        "n:62"
+      ],
+      "metadata": {
+        "label": "c1",
+        "question": "Fail unless the contributions field is an array of exactly 4 strings."
+      },
+      "status": "complete",
+      "result": {
+        "success": true,
+        "agent_name": "critic",
+        "output": {
+          "verdict": "fail",
+          "rationale": "The contributions field is an array of only 3 strings instead of the required 4."
+        },
+        "artifacts": [],
+        "successors": [],
+        "cost": 0.0,
+        "elapsed_s": 5.928386449813843,
+        "provider": "openai",
+        "error": null
+      },
+      "_result_typed": true,
+      "id": "n:63"
+    },
+    {
+      "skill": "formatter",
+      "inputs": [
+        "USER_QUERY",
+        "n:63"
+      ],
+      "metadata": {
+        "label": "out"
+      },
+      "status": "skipped",
+      "id": "n:64"
+    },
+    {
+      "skill": "planner",
+      "inputs": [
+        "USER_QUERY"
+      ],
+      "metadata": {
+        "failure_report": "critic failed target=n:62 child=n:64 rationale=The contributions field is an array of only 3 strings instead of the required 4.",
+        "recovers": "n:62",
+        "recovery_reason": "critic_fail"
+      },
+      "status": "complete",
+      "result": {
+        "success": true,
+        "agent_name": "planner",
+        "output": {
+          "rationale": "Extract the required fields from the source text, then validate the contributions array before formatting the final output.",
+          "nodes": [
+            {
+              "skill": "distiller",
+              "inputs": [
+                "USER_QUERY"
+              ],
+              "metadata": {
+                "label": "d1",
+                "question": "Extract birth_year, death_year, and contributions from the provided source."
+              }
+            },
+            {
+              "skill": "critic",
+              "inputs": [
+                "n:d1"
+              ],
+              "metadata": {
+                "label": "c1",
+                "question": "Fail unless the contributions field is an array of exactly 4 strings."
+              }
+            },
+            {
+              "skill": "formatter",
+              "inputs": [
+                "USER_QUERY",
+                "n:c1"
+              ],
+              "metadata": {
+                "label": "out"
+              }
+            }
+          ]
+        },
+        "artifacts": [],
+        "successors": [
+          {
+            "skill": "distiller",
+            "inputs": [
+              "USER_QUERY"
+            ],
+            "metadata": {
+              "label": "d1",
+              "question": "Extract birth_year, death_year, and contributions from the provided source."
+            }
+          },
+          {
+            "skill": "critic",
+            "inputs": [
+              "n:d1"
+            ],
+            "metadata": {
+              "label": "c1",
+              "question": "Fail unless the contributions field is an array of exactly 4 strings."
+            }
+          },
+          {
+            "skill": "formatter",
+            "inputs": [
+              "USER_QUERY",
+              "n:c1"
+            ],
+            "metadata": {
+              "label": "out"
+            }
+          }
+        ],
+        "cost": 0.0,
+        "elapsed_s": 6.680150985717773,
+        "provider": "openai",
+        "error": null
+      },
+      "_result_typed": true,
+      "id": "n:65"
+    },
+    {
+      "skill": "distiller",
+      "inputs": [
+        "USER_QUERY"
+      ],
+      "metadata": {
+        "label": "d1",
+        "question": "Extract birth_year, death_year, and contributions from the provided source."
+      },
+      "status": "complete",
+      "result": {
+        "success": true,
+        "agent_name": "distiller",
+        "output": {
+          "fields": {
+            "birth_year": "1916",
+            "death_year": "2001",
+            "contributions": [
+              "information theory",
+              "digital circuit design theory",
+              "cryptographic theory"
+            ]
+          },
+          "rationale": "Claude Shannon was born in 1916 and died in 2001; his contributions were listed as information theory, digital circuit design theory, and cryptographic theory."
+        },
+        "artifacts": [],
+        "successors": [],
+        "cost": 0.0,
+        "elapsed_s": 4.96644926071167,
+        "provider": "openai",
+        "error": null
+      },
+      "_result_typed": true,
+      "id": "n:66"
+    },
+    {
+      "skill": "critic",
+      "inputs": [
+        "n:66"
+      ],
+      "metadata": {
+        "label": "c1",
+        "question": "Fail unless the contributions field is an array of exactly 4 strings."
+      },
+      "status": "complete",
+      "result": {
+        "success": true,
+        "agent_name": "critic",
+        "output": {
+          "verdict": "fail",
+          "rationale": "The contributions field is missing one entry; it should contain exactly 4 strings but only has 3."
+        },
+        "artifacts": [],
+        "successors": [],
+        "cost": 0.0,
+        "elapsed_s": 4.072330951690674,
+        "provider": "openai",
+        "error": null
+      },
+      "_result_typed": true,
+      "id": "n:67"
+    },
+    {
+      "skill": "formatter",
+      "inputs": [
+        "USER_QUERY",
+        "n:67"
+      ],
+      "metadata": {
+        "label": "out"
+      },
+      "status": "skipped",
+      "id": "n:68"
+    },
+    {
+      "skill": "planner",
+      "inputs": [
+        "USER_QUERY"
+      ],
+      "metadata": {
+        "failure_report": "critic failed target=n:66 child=n:68 rationale=The contributions field is missing one entry; it should contain exactly 4 strings but only has 3.",
+        "recovers": "n:66",
+        "recovery_reason": "critic_fail"
+      },
+      "status": "complete",
+      "result": {
+        "success": true,
+        "agent_name": "planner",
+        "output": {
+          "rationale": "Extract structured fields from the provided source and ensure the contributions meet the specified criteria.",
+          "nodes": [
+            {
+              "skill": "distiller",
+              "inputs": [
+                "USER_QUERY"
+              ],
+              "metadata": {
+                "label": "d1",
+                "question": "Extract birth_year, death_year, and contributions from the provided source."
+              }
+            },
+            {
+              "skill": "critic",
+              "inputs": [
+                "n:d1"
+              ],
+              "metadata": {
+                "label": "c1",
+                "question": "Fail unless the distiller JSON field contributions is an array of exactly 4 strings."
+              }
+            },
+            {
+              "skill": "formatter",
+              "inputs": [
+                "USER_QUERY",
+                "n:c1"
+              ],
+              "metadata": {
+                "label": "out"
+              }
+            }
+          ]
+        },
+        "artifacts": [],
+        "successors": [
+          {
+            "skill": "distiller",
+            "inputs": [
+              "USER_QUERY"
+            ],
+            "metadata": {
+              "label": "d1",
+              "question": "Extract birth_year, death_year, and contributions from the provided source."
+            }
+          },
+          {
+            "skill": "critic",
+            "inputs": [
+              "n:d1"
+            ],
+            "metadata": {
+              "label": "c1",
+              "question": "Fail unless the distiller JSON field contributions is an array of exactly 4 strings."
+            }
+          },
+          {
+            "skill": "formatter",
+            "inputs": [
+              "USER_QUERY",
+              "n:c1"
+            ],
+            "metadata": {
+              "label": "out"
+            }
+          }
+        ],
+        "cost": 0.0,
+        "elapsed_s": 7.7268407344818115,
+        "provider": "openai",
+        "error": null
+      },
+      "_result_typed": true,
+      "id": "n:69"
+    },
+    {
+      "skill": "distiller",
+      "inputs": [
+        "USER_QUERY"
+      ],
+      "metadata": {
+        "label": "d1",
+        "question": "Extract birth_year, death_year, and contributions from the provided source."
+      },
+      "status": "complete",
+      "result": {
+        "success": true,
+        "agent_name": "distiller",
+        "output": {
+          "fields": {
+            "birth_year": "1916",
+            "death_year": "2001",
+            "contributions": [
+              "information theory",
+              "digital circuit design theory",
+              "cryptographic theory"
+            ]
+          },
+          "rationale": "Claude Shannon was born in 1916 and died in 2001; his contributions were listed as information theory, digital circuit design theory, and cryptographic theory."
+        },
+        "artifacts": [],
+        "successors": [],
+        "cost": 0.0,
+        "elapsed_s": 4.9662675857543945,
+        "provider": "openai",
+        "error": null
+      },
+      "_result_typed": true,
+      "id": "n:70"
+    },
+    {
+      "skill": "critic",
+      "inputs": [
+        "n:70"
+      ],
+      "metadata": {
+        "label": "c1",
+        "question": "Fail unless the distiller JSON field contributions is an array of exactly 4 strings."
+      },
+      "status": "complete",
+      "result": {
+        "success": true,
+        "agent_name": "critic",
+        "output": {
+          "verdict": "fail",
+          "rationale": "The contributions field is an array of 3 strings instead of the required 4."
+        },
+        "artifacts": [],
+        "successors": [],
+        "cost": 0.0,
+        "elapsed_s": 3.465397596359253,
+        "provider": "openai",
+        "error": null
+      },
+      "_result_typed": true,
+      "id": "n:71"
+    },
+    {
+      "skill": "formatter",
+      "inputs": [
+        "USER_QUERY",
+        "n:71"
+      ],
+      "metadata": {
+        "label": "out"
+      },
+      "status": "skipped",
+      "id": "n:72"
+    },
+    {
+      "skill": "planner",
+      "inputs": [
+        "USER_QUERY"
+      ],
+      "metadata": {
+        "failure_report": "critic failed target=n:70 child=n:72 rationale=The contributions field is an array of 3 strings instead of the required 4.",
+        "recovers": "n:70",
+        "recovery_reason": "critic_fail"
+      },
+      "status": "complete",
+      "result": {
+        "success": true,
+        "agent_name": "planner",
+        "output": {
+          "rationale": "Extract the required fields from the source and validate the contributions array.",
+          "nodes": [
+            {
+              "skill": "distiller",
+              "inputs": [
+                "USER_QUERY"
+              ],
+              "metadata": {
+                "label": "d1",
+                "question": "Extract birth_year, death_year, and contributions from the provided source."
+              }
+            },
+            {
+              "skill": "critic",
+              "inputs": [
+                "n:d1"
+              ],
+              "metadata": {
+                "label": "c1",
+                "question": "Fail unless the distiller JSON field contributions is an array of exactly 4 strings."
+              }
+            },
+            {
+              "skill": "formatter",
+              "inputs": [
+                "USER_QUERY",
+                "n:c1"
+              ],
+              "metadata": {
+                "label": "out"
+              }
+            }
+          ]
+        },
+        "artifacts": [],
+        "successors": [
+          {
+            "skill": "distiller",
+            "inputs": [
+              "USER_QUERY"
+            ],
+            "metadata": {
+              "label": "d1",
+              "question": "Extract birth_year, death_year, and contributions from the provided source."
+            }
+          },
+          {
+            "skill": "critic",
+            "inputs": [
+              "n:d1"
+            ],
+            "metadata": {
+              "label": "c1",
+              "question": "Fail unless the distiller JSON field contributions is an array of exactly 4 strings."
+            }
+          },
+          {
+            "skill": "formatter",
+            "inputs": [
+              "USER_QUERY",
+              "n:c1"
+            ],
+            "metadata": {
+              "label": "out"
+            }
+          }
+        ],
+        "cost": 0.0,
+        "elapsed_s": 6.50680685043335,
+        "provider": "openai",
+        "error": null
+      },
+      "_result_typed": true,
+      "id": "n:73"
+    },
+    {
+      "skill": "distiller",
+      "inputs": [
+        "USER_QUERY"
+      ],
+      "metadata": {
+        "label": "d1",
+        "question": "Extract birth_year, death_year, and contributions from the provided source."
+      },
+      "status": "complete",
+      "result": {
+        "success": true,
+        "agent_name": "distiller",
+        "output": {
+          "fields": {
+            "birth_year": "1916",
+            "death_year": "2001",
+            "contributions": [
+              "information theory",
+              "digital circuit design theory",
+              "cryptographic theory"
+            ]
+          },
+          "rationale": "Claude Shannon was born in 1916 and died in 2001; his contributions were mentioned as information theory, digital circuit design theory, and cryptographic theory."
+        },
+        "artifacts": [],
+        "successors": [],
+        "cost": 0.0,
+        "elapsed_s": 8.319339990615845,
+        "provider": "openai",
+        "error": null
+      },
+      "_result_typed": true,
+      "id": "n:74"
+    },
+    {
+      "skill": "critic",
+      "inputs": [
+        "n:74"
+      ],
+      "metadata": {
+        "label": "c1",
+        "question": "Fail unless the distiller JSON field contributions is an array of exactly 4 strings."
+      },
+      "status": "complete",
+      "result": {
+        "success": true,
+        "agent_name": "critic",
+        "output": {
+          "verdict": "fail",
+          "rationale": "The contributions field is an array of 3 strings, but it should contain exactly 4 strings."
+        },
+        "artifacts": [],
+        "successors": [],
+        "cost": 0.0,
+        "elapsed_s": 3.642063856124878,
+        "provider": "openai",
+        "error": null
+      },
+      "_result_typed": true,
+      "id": "n:75"
+    },
+    {
+      "skill": "formatter",
+      "inputs": [
+        "USER_QUERY",
+        "n:75"
+      ],
+      "metadata": {
+        "label": "out"
+      },
+      "status": "skipped",
+      "id": "n:76"
+    },
+    {
+      "skill": "planner",
+      "inputs": [
+        "USER_QUERY"
+      ],
+      "metadata": {
+        "failure_report": "critic failed target=n:74 child=n:76 rationale=The contributions field is an array of 3 strings, but it should contain exactly 4 strings.",
+        "recovers": "n:74",
+        "recovery_reason": "critic_fail"
+      },
+      "status": "complete",
+      "result": {
+        "success": true,
+        "agent_name": "planner",
+        "output": {
+          "rationale": "Extract structured information from the source text, validate the contributions, and format the final output.",
+          "nodes": [
+            {
+              "skill": "distiller",
+              "inputs": [
+                "USER_QUERY"
+              ],
+              "metadata": {
+                "label": "d1",
+                "question": "Extract birth_year, death_year, and contributions from the provided source."
+              }
+            },
+            {
+              "skill": "critic",
+              "inputs": [
+                "n:d1"
+              ],
+              "metadata": {
+                "label": "c1",
+                "question": "Fail unless the contributions field is an array of exactly 4 strings."
+              }
+            },
+            {
+              "skill": "formatter",
+              "inputs": [
+                "USER_QUERY",
+                "n:c1"
+              ],
+              "metadata": {
+                "label": "out"
+              }
+            }
+          ]
+        },
+        "artifacts": [],
+        "successors": [
+          {
+            "skill": "distiller",
+            "inputs": [
+              "USER_QUERY"
+            ],
+            "metadata": {
+              "label": "d1",
+              "question": "Extract birth_year, death_year, and contributions from the provided source."
+            }
+          },
+          {
+            "skill": "critic",
+            "inputs": [
+              "n:d1"
+            ],
+            "metadata": {
+              "label": "c1",
+              "question": "Fail unless the contributions field is an array of exactly 4 strings."
+            }
+          },
+          {
+            "skill": "formatter",
+            "inputs": [
+              "USER_QUERY",
+              "n:c1"
+            ],
+            "metadata": {
+              "label": "out"
+            }
+          }
+        ],
+        "cost": 0.0,
+        "elapsed_s": 10.48617672920227,
+        "provider": "openai",
+        "error": null
+      },
+      "_result_typed": true,
+      "id": "n:77"
+    },
+    {
+      "skill": "distiller",
+      "inputs": [
+        "USER_QUERY"
+      ],
+      "metadata": {
+        "label": "d1",
+        "question": "Extract birth_year, death_year, and contributions from the provided source."
+      },
+      "status": "complete",
+      "result": {
+        "success": true,
+        "agent_name": "distiller",
+        "output": {
+          "fields": {
+            "birth_year": "1916",
+            "death_year": "2001",
+            "contributions": [
+              "information theory",
+              "digital circuit design theory",
+              "cryptographic theory"
+            ]
+          },
+          "rationale": "Claude Shannon was born in 1916 and died in 2001; his contributions were listed as information theory, digital circuit design theory, and cryptographic theory."
+        },
+        "artifacts": [],
+        "successors": [],
+        "cost": 0.0,
+        "elapsed_s": 4.917694330215454,
+        "provider": "openai",
+        "error": null
+      },
+      "_result_typed": true,
+      "id": "n:78"
+    },
+    {
+      "skill": "critic",
+      "inputs": [
+        "n:78"
+      ],
+      "metadata": {
+        "label": "c1",
+        "question": "Fail unless the contributions field is an array of exactly 4 strings."
+      },
+      "status": "complete",
+      "result": {
+        "success": true,
+        "agent_name": "critic",
+        "output": {
+          "verdict": "fail",
+          "rationale": "The contributions field is an array of only 3 strings, while it should contain exactly 4."
+        },
+        "artifacts": [],
+        "successors": [],
+        "cost": 0.0,
+        "elapsed_s": 4.058071136474609,
+        "provider": "openai",
+        "error": null
+      },
+      "_result_typed": true,
+      "id": "n:79"
+    },
+    {
+      "skill": "formatter",
+      "inputs": [
+        "USER_QUERY",
+        "n:79"
+      ],
+      "metadata": {
+        "label": "out"
+      },
+      "status": "skipped",
+      "id": "n:80"
+    },
+    {
+      "skill": "planner",
+      "inputs": [
+        "USER_QUERY"
+      ],
+      "metadata": {
+        "failure_report": "critic failed target=n:78 child=n:80 rationale=The contributions field is an array of only 3 strings, while it should contain exactly 4.",
+        "recovers": "n:78",
+        "recovery_reason": "critic_fail"
+      },
+      "status": "pending",
+      "id": "n:81"
+    }
+  ],
+  "edges": [
+    {
+      "source": "n:2",
+      "target": "n:3"
+    },
+    {
+      "source": "n:3",
+      "target": "n:4"
+    },
+    {
+      "source": "n:6",
+      "target": "n:7"
+    },
+    {
+      "source": "n:7",
+      "target": "n:8"
+    },
+    {
+      "source": "n:10",
+      "target": "n:11"
+    },
+    {
+      "source": "n:11",
+      "target": "n:12"
+    },
+    {
+      "source": "n:14",
+      "target": "n:15"
+    },
+    {
+      "source": "n:15",
+      "target": "n:16"
+    },
+    {
+      "source": "n:18",
+      "target": "n:19"
+    },
+    {
+      "source": "n:19",
+      "target": "n:20"
+    },
+    {
+      "source": "n:22",
+      "target": "n:23"
+    },
+    {
+      "source": "n:23",
+      "target": "n:24"
+    },
+    {
+      "source": "n:26",
+      "target": "n:27"
+    },
+    {
+      "source": "n:27",
+      "target": "n:28"
+    },
+    {
+      "source": "n:30",
+      "target": "n:31"
+    },
+    {
+      "source": "n:31",
+      "target": "n:32"
+    },
+    {
+      "source": "n:34",
+      "target": "n:35"
+    },
+    {
+      "source": "n:35",
+      "target": "n:36"
+    },
+    {
+      "source": "n:38",
+      "target": "n:39"
+    },
+    {
+      "source": "n:39",
+      "target": "n:40"
+    },
+    {
+      "source": "n:42",
+      "target": "n:43"
+    },
+    {
+      "source": "n:43",
+      "target": "n:44"
+    },
+    {
+      "source": "n:46",
+      "target": "n:47"
+    },
+    {
+      "source": "n:47",
+      "target": "n:48"
+    },
+    {
+      "source": "n:50",
+      "target": "n:51"
+    },
+    {
+      "source": "n:51",
+      "target": "n:52"
+    },
+    {
+      "source": "n:54",
+      "target": "n:55"
+    },
+    {
+      "source": "n:55",
+      "target": "n:56"
+    },
+    {
+      "source": "n:58",
+      "target": "n:59"
+    },
+    {
+      "source": "n:59",
+      "target": "n:60"
+    },
+    {
+      "source": "n:62",
+      "target": "n:63"
+    },
+    {
+      "source": "n:63",
+      "target": "n:64"
+    },
+    {
+      "source": "n:66",
+      "target": "n:67"
+    },
+    {
+      "source": "n:67",
+      "target": "n:68"
+    },
+    {
+      "source": "n:70",
+      "target": "n:71"
+    },
+    {
+      "source": "n:71",
+      "target": "n:72"
+    },
+    {
+      "source": "n:74",
+      "target": "n:75"
+    },
+    {
+      "source": "n:75",
+      "target": "n:76"
+    },
+    {
+      "source": "n:78",
+      "target": "n:79"
+    },
+    {
+      "source": "n:79",
+      "target": "n:80"
+    }
+  ]
+}

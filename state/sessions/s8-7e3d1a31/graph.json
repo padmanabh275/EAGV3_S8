@@ -1,0 +1,80 @@
+{
+  "directed": true,
+  "multigraph": false,
+  "graph": {},
+  "nodes": [
+    {
+      "skill": "planner",
+      "inputs": [
+        "USER_QUERY"
+      ],
+      "metadata": {},
+      "status": "complete",
+      "result": {
+        "success": true,
+        "agent_name": "planner",
+        "output": {
+          "rationale": "Use existing knowledge to respond to the greeting.",
+          "nodes": [
+            {
+              "skill": "formatter",
+              "inputs": [
+                "USER_QUERY"
+              ],
+              "metadata": {
+                "label": "out",
+                "question": "Respond to the greeting."
+              }
+            }
+          ]
+        },
+        "artifacts": [],
+        "successors": [
+          {
+            "skill": "formatter",
+            "inputs": [
+              "USER_QUERY"
+            ],
+            "metadata": {
+              "label": "out",
+              "question": "Respond to the greeting."
+            }
+          }
+        ],
+        "cost": 0.0,
+        "elapsed_s": 4.645448446273804,
+        "provider": "openai",
+        "error": null
+      },
+      "_result_typed": true,
+      "id": "n:1"
+    },
+    {
+      "skill": "formatter",
+      "inputs": [
+        "USER_QUERY"
+      ],
+      "metadata": {
+        "label": "out",
+        "question": "Respond to the greeting."
+      },
+      "status": "complete",
+      "result": {
+        "success": true,
+        "agent_name": "formatter",
+        "output": {
+          "final_answer": "Hello! How can I assist you today?"
+        },
+        "artifacts": [],
+        "successors": [],
+        "cost": 0.0,
+        "elapsed_s": 3.7783093452453613,
+        "provider": "openai",
+        "error": null
+      },
+      "_result_typed": true,
+      "id": "n:2"
+    }
+  ],
+  "edges": []
+}

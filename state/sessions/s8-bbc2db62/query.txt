@@ -1,0 +1,2 @@
+For Lagos, Cairo, and Kinshasa, find current populations and growth rates
+and tell me which is growing fastest.

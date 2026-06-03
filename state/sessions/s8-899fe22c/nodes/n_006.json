@@ -1,0 +1,23 @@
+{
+  "node_id": "n:6",
+  "skill": "corpus_indexer",
+  "status": "failed",
+  "inputs": [
+    "USER_QUERY"
+  ],
+  "result": {
+    "success": false,
+    "agent_name": "corpus_indexer",
+    "output": {},
+    "artifacts": [],
+    "successors": [],
+    "cost": 0.0,
+    "elapsed_s": 0.0,
+    "provider": "",
+    "error": "exception: ExceptionGroup: unhandled errors in a TaskGroup (1 sub-exception)"
+  },
+  "prompt_sent": "(exception before prompt-render)",
+  "started_at": 1780488713.425756,
+  "completed_at": 1780488713.425756,
+  "retries": 0
+}

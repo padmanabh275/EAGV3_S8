@@ -1,0 +1,1 @@
+Find the current populations of London, Paris, and Berlin, then tell me which two cities are closest in population size.

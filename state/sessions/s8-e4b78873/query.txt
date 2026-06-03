@@ -1,0 +1,1 @@
+Compute the exact sum of all integers from 1 to 1_000_000 inclusive. Use the coder skill to run Python in the sandbox. Do not answer by mental math — the final answer must come from executed code stdout.

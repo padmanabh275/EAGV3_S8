@@ -1,0 +1,182 @@
+{
+  "directed": true,
+  "multigraph": false,
+  "graph": {},
+  "nodes": [
+    {
+      "skill": "planner",
+      "inputs": [
+        "USER_QUERY"
+      ],
+      "metadata": {},
+      "status": "complete",
+      "result": {
+        "success": true,
+        "agent_name": "planner",
+        "output": {
+          "rationale": "Use the existing knowledge base to retrieve the population data for London, Paris, and Berlin.",
+          "nodes": [
+            {
+              "skill": "retriever",
+              "inputs": [],
+              "metadata": {
+                "label": "rCities",
+                "question": "current populations of London, Paris, and Berlin"
+              }
+            },
+            {
+              "skill": "formatter",
+              "inputs": [
+                "USER_QUERY",
+                "n:rCities"
+              ],
+              "metadata": {
+                "label": "out"
+              }
+            }
+          ]
+        },
+        "artifacts": [],
+        "successors": [
+          {
+            "skill": "retriever",
+            "inputs": [],
+            "metadata": {
+              "label": "rCities",
+              "question": "current populations of London, Paris, and Berlin"
+            }
+          },
+          {
+            "skill": "formatter",
+            "inputs": [
+              "USER_QUERY",
+              "n:rCities"
+            ],
+            "metadata": {
+              "label": "out"
+            }
+          }
+        ],
+        "cost": 0.0,
+        "elapsed_s": 5.43617057800293,
+        "provider": "openai",
+        "error": null
+      },
+      "_result_typed": true,
+      "id": "n:1"
+    },
+    {
+      "skill": "retriever",
+      "inputs": [],
+      "metadata": {
+        "label": "rCities",
+        "question": "current populations of London, Paris, and Berlin"
+      },
+      "status": "failed",
+      "result": {
+        "success": false,
+        "agent_name": "retriever",
+        "output": {},
+        "artifacts": [],
+        "successors": [],
+        "cost": 0.0,
+        "elapsed_s": 0.0,
+        "provider": "",
+        "error": "exception: ExceptionGroup: unhandled errors in a TaskGroup (1 sub-exception)"
+      },
+      "_result_typed": true,
+      "id": "n:2"
+    },
+    {
+      "skill": "formatter",
+      "inputs": [
+        "USER_QUERY",
+        "n:2"
+      ],
+      "metadata": {
+        "label": "out"
+      },
+      "status": "pending",
+      "id": "n:3"
+    },
+    {
+      "skill": "planner",
+      "inputs": [
+        "USER_QUERY"
+      ],
+      "metadata": {
+        "failure_report": "node=n:2 skill=retriever reason=upstream_failure error=exception: ExceptionGroup: unhandled errors in a TaskGroup (1 sub-exception)",
+        "recovers": "n:2",
+        "recovery_reason": "upstream_failure"
+      },
+      "status": "complete",
+      "result": {
+        "success": true,
+        "agent_name": "planner",
+        "output": {
+          "rationale": "Use existing knowledge to provide the current populations of London, Paris, and Berlin, then determine which two cities are closest in size.",
+          "nodes": [
+            {
+              "skill": "formatter",
+              "inputs": [
+                "USER_QUERY",
+                "n:2"
+              ],
+              "metadata": {
+                "label": "out",
+                "question": "Find the current populations of London, Paris, and Berlin, then tell me which two cities are closest in population size."
+              }
+            }
+          ]
+        },
+        "artifacts": [],
+        "successors": [
+          {
+            "skill": "formatter",
+            "inputs": [
+              "USER_QUERY",
+              "n:2"
+            ],
+            "metadata": {
+              "label": "out",
+              "question": "Find the current populations of London, Paris, and Berlin, then tell me which two cities are closest in population size."
+            }
+          }
+        ],
+        "cost": 0.0,
+        "elapsed_s": 5.152173757553101,
+        "provider": "openai",
+        "error": null
+      },
+      "_result_typed": true,
+      "id": "n:4"
+    },
+    {
+      "skill": "formatter",
+      "inputs": [
+        "USER_QUERY",
+        "n:2"
+      ],
+      "metadata": {
+        "label": "out",
+        "question": "Find the current populations of London, Paris, and Berlin, then tell me which two cities are closest in population size."
+      },
+      "status": "pending",
+      "id": "n:5"
+    }
+  ],
+  "edges": [
+    {
+      "source": "n:1",
+      "target": "n:2"
+    },
+    {
+      "source": "n:2",
+      "target": "n:3"
+    },
+    {
+      "source": "n:2",
+      "target": "n:5"
+    }
+  ]
+}

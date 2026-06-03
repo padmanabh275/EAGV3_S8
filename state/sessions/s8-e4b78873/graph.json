@@ -1,0 +1,169 @@
+{
+  "directed": true,
+  "multigraph": false,
+  "graph": {},
+  "nodes": [
+    {
+      "skill": "planner",
+      "inputs": [
+        "USER_QUERY"
+      ],
+      "metadata": {},
+      "status": "complete",
+      "result": {
+        "success": true,
+        "agent_name": "planner",
+        "output": {
+          "rationale": "Compute with Python, then format sandbox stdout.",
+          "nodes": [
+            {
+              "skill": "coder",
+              "inputs": [
+                "USER_QUERY"
+              ],
+              "metadata": {
+                "label": "py",
+                "question": "Print the exact sum of integers from 1 to 1_000_000."
+              }
+            },
+            {
+              "skill": "formatter",
+              "inputs": [
+                "USER_QUERY",
+                "n:py"
+              ],
+              "metadata": {
+                "label": "out",
+                "question": "Use sandbox stdout only; do not recompute."
+              }
+            }
+          ]
+        },
+        "artifacts": [],
+        "successors": [
+          {
+            "skill": "coder",
+            "inputs": [
+              "USER_QUERY"
+            ],
+            "metadata": {
+              "label": "py",
+              "question": "Print the exact sum of integers from 1 to 1_000_000."
+            }
+          },
+          {
+            "skill": "formatter",
+            "inputs": [
+              "USER_QUERY",
+              "n:py"
+            ],
+            "metadata": {
+              "label": "out",
+              "question": "Use sandbox stdout only; do not recompute."
+            }
+          }
+        ],
+        "cost": 0.0,
+        "elapsed_s": 5.72753119468689,
+        "provider": "openai",
+        "error": null
+      },
+      "_result_typed": true,
+      "id": "n:1"
+    },
+    {
+      "skill": "coder",
+      "inputs": [
+        "USER_QUERY"
+      ],
+      "metadata": {
+        "label": "py",
+        "question": "Print the exact sum of integers from 1 to 1_000_000."
+      },
+      "status": "complete",
+      "result": {
+        "success": true,
+        "agent_name": "coder",
+        "output": {
+          "code": "total = sum(range(1, 1_000_001))\nprint(total)\n",
+          "rationale": "The script computes the exact sum of all integers from 1 to 1,000,000."
+        },
+        "artifacts": [],
+        "successors": [],
+        "cost": 0.0,
+        "elapsed_s": 4.416827201843262,
+        "provider": "openai",
+        "error": null
+      },
+      "_result_typed": true,
+      "id": "n:2"
+    },
+    {
+      "skill": "formatter",
+      "inputs": [
+        "USER_QUERY",
+        "n:4"
+      ],
+      "metadata": {
+        "label": "out",
+        "question": "Use sandbox stdout only; do not recompute."
+      },
+      "status": "complete",
+      "result": {
+        "success": true,
+        "agent_name": "formatter",
+        "output": {
+          "final_answer": "The exact sum of all integers from 1 to 1,000,000 inclusive is 500,000,500,000."
+        },
+        "artifacts": [],
+        "successors": [],
+        "cost": 0.0,
+        "elapsed_s": 4.292763948440552,
+        "provider": "openai",
+        "error": null
+      },
+      "_result_typed": true,
+      "id": "n:3"
+    },
+    {
+      "skill": "sandbox_executor",
+      "inputs": [
+        "n:2"
+      ],
+      "metadata": {},
+      "status": "complete",
+      "result": {
+        "success": true,
+        "agent_name": "sandbox_executor",
+        "output": {
+          "exit_code": 0,
+          "stdout": "500000500000\r\n",
+          "stdout_truncated": false,
+          "stderr": "",
+          "stderr_truncated": false,
+          "files_written": [],
+          "timed_out": false,
+          "cwd": "C:\\Users\\PADMAN~1\\AppData\\Local\\Temp\\s8sandbox-qs4tzaql"
+        },
+        "artifacts": [],
+        "successors": [],
+        "cost": 0.0,
+        "elapsed_s": 0.19031214714050293,
+        "provider": "",
+        "error": null
+      },
+      "_result_typed": true,
+      "id": "n:4"
+    }
+  ],
+  "edges": [
+    {
+      "source": "n:2",
+      "target": "n:4"
+    },
+    {
+      "source": "n:4",
+      "target": "n:3"
+    }
+  ]
+}

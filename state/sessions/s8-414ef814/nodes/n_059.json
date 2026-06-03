@@ -1,0 +1,26 @@
+{
+  "node_id": "n:59",
+  "skill": "critic",
+  "status": "complete",
+  "inputs": [
+    "n:58"
+  ],
+  "result": {
+    "success": true,
+    "agent_name": "critic",
+    "output": {
+      "verdict": "fail",
+      "rationale": "The contributions field is an array of only 3 strings instead of the required 4."
+    },
+    "artifacts": [],
+    "successors": [],
+    "cost": 0.0,
+    "elapsed_s": 3.658379554748535,
+    "provider": "openai",
+    "error": null
+  },
+  "prompt_sent": "You are the Critic skill. You evaluate one upstream node's output and\nreturn pass-or-fail with a short rationale.\n\nYou make no tool calls. The upstream output and (when the orchestrator\nhas it) the inputs that node received both appear in the prompt.\n\nProcedure:\n  1. Read the UPSTREAM_OUTPUT.\n  2. Check it against the INPUTS that produced it.\n  3. Look for: fabricated fields, claims unsupported by the input,\n     contradictions, missing fields the input clearly contained.\n  4. Emit pass or fail.\n\nOutput schema (JSON, no prose, no markdown fences):\n\n  {\n    \"verdict\": \"pass\" | \"fail\",\n    \"rationale\": \"<one or two short sentences>\"\n  }\n\nWhen you emit `fail`, the orchestrator may invoke the Planner to\nrecover. Be specific in your rationale so the recovery plan can be\ntargeted. Do not fail for stylistic reasons; only fail when the\nupstream output is wrong, missing, or unsupported.\n\nQUESTION: Fail unless the contributions field is an array of exactly 4 strings.\n\nMEMORY HITS (8 from FAISS):\n  - [fact] Claude Shannon was born in 1916, died in 2001, and made contributions in information theory, digital circuit design theory, and cryptographic theory.\n      source: user_query\n  - [fact] Claude Shannon was born in 1916 and died in 2001 with contributions to information theory, digital circuit design theory, and cryptographic theory.\n      source: user_query\n  - [fact] Claude Shannon's birth date, death date, and contributions to information theory.\n      source: user_query\n  - [fact] Claude Shannon birth and death dates and three contributions to information theory\n      source: user_query\n      raw: When was Claude Shannon born and when did he die? Name three of his contributions to information theory.\n  - [tool_outcome] Population data comparison for London, Paris, and Berlin\n      source: user_query\n      raw: Find the populations of London, Paris, Berlin and tell me which two are closest in size.\n  - [tool_outcome] Population data comparison for London, Paris, and Berlin\n      source: user_query\n      raw: Find the populations of London, Paris, Berlin and tell me which two are closest in size.\n  - [tool_outcome] Population lookup and comparison for London, Paris, and Berlin\n      source: user_query\n      raw: Find the populations of London, Paris, Berlin and tell me which two are closest in size.\n  - [tool_outcome] Attempting to read from non-existent file path.\n      source: user_query\n      raw: Read /nonexistent/path.txt and tell me what's in it.\n\nINPUTS:\n[\n  {\n    \"id\": \"n:58\",\n    \"kind\": \"upstream\",\n    \"skill\": \"distiller\",\n    \"output\": {\n      \"fields\": {\n        \"birth_year\": \"1916\",\n        \"death_year\": \"2001\",\n        \"contributions\": [\n          \"information theory\",\n          \"digital circuit design theory\",\n          \"cryptographic theory\"\n        ]\n      },\n      \"rationale\": \"Claude Shannon was born in 1916 and died in 2001; his contributions were listed as information theory, digital circuit design theory, and cryptographic theory.\"\n    }\n  }\n]",
+  "started_at": 1780487001.3589675,
+  "completed_at": 1780487005.017347,
+  "retries": 0
+}

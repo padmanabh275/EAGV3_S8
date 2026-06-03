@@ -1,0 +1,8 @@
+Extract birth_year, death_year, and contributions (array of exactly 4 strings) from SOURCE below only.
+
+Use distiller, then critic, then formatter. Wire formatter inputs to the critic node (n:critic label), not directly to distiller.
+
+Critic rule (put in critic metadata.question): Fail unless the distiller JSON field contributions is an array of exactly 4 strings. Count elements in the array; do not use memory hits.
+
+SOURCE:
+Claude Shannon was born in 1916 and died in 2001. His three contributions were information theory, digital circuit design theory, and cryptographic theory.

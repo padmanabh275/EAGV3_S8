@@ -1,0 +1,88 @@
+{
+  "node_id": "n:1",
+  "skill": "planner",
+  "status": "complete",
+  "inputs": [
+    "USER_QUERY"
+  ],
+  "result": {
+    "success": true,
+    "agent_name": "planner",
+    "output": {
+      "rationale": "Extract structured data from the provided source text and ensure the contributions meet the specified criteria.",
+      "nodes": [
+        {
+          "skill": "distiller",
+          "inputs": [
+            "USER_QUERY"
+          ],
+          "metadata": {
+            "label": "d1",
+            "question": "Extract birth_year, death_year, and contributions from the source."
+          }
+        },
+        {
+          "skill": "critic",
+          "inputs": [
+            "n:d1"
+          ],
+          "metadata": {
+            "label": "c1",
+            "question": "Ensure contributions contains exactly 3 items and all values are supported by the source."
+          }
+        },
+        {
+          "skill": "formatter",
+          "inputs": [
+            "USER_QUERY",
+            "n:d1"
+          ],
+          "metadata": {
+            "label": "out"
+          }
+        }
+      ]
+    },
+    "artifacts": [],
+    "successors": [
+      {
+        "skill": "distiller",
+        "inputs": [
+          "USER_QUERY"
+        ],
+        "metadata": {
+          "label": "d1",
+          "question": "Extract birth_year, death_year, and contributions from the source."
+        }
+      },
+      {
+        "skill": "critic",
+        "inputs": [
+          "n:d1"
+        ],
+        "metadata": {
+          "label": "c1",
+          "question": "Ensure contributions contains exactly 3 items and all values are supported by the source."
+        }
+      },
+      {
+        "skill": "formatter",
+        "inputs": [
+          "USER_QUERY",
+          "n:d1"
+        ],
+        "metadata": {
+          "label": "out"
+        }
+      }
+    ],
+    "cost": 0.0,
+    "elapsed_s": 7.595233917236328,
+    "provider": "openai",
+    "error": null
+  },
+  "prompt_sent": "You are the Planner. Emit the next set of nodes for the orchestrator.\n\nAvailable skills:\n  retriever          search the agent's indexed knowledge base\n  researcher         fetch fresh content from the web (URLs, search)\n  distiller          extract structured fields from raw text\n  summariser         condense long content\n  critic             pass/fail evaluation of an upstream node\n  formatter          render the final user-facing answer (TERMINAL)\n  coder              emit Python (stub; routes to sandbox_executor)\n  sandbox_executor   run Python from coder\n  (browser           reserved for Session 9)\n\nOutput (JSON, no markdown):\n{\n  \"rationale\": \"<one sentence>\",\n  \"nodes\": [\n    {\"skill\": \"<name>\",\n     \"inputs\": [\"USER_QUERY\" or \"n:<label>\" or \"art:<id>\"],\n     \"metadata\": {\"label\": \"<short_id>\", \"question\": \"<optional hint>\"}}\n  ]\n}\n\nReference upstream nodes as \"n:<label>\" where label matches a\nsibling's metadata.label. The final node must be a formatter.\n\nScoping a worker — IMPORTANT:\n  - A node only sees USER_QUERY if you list \"USER_QUERY\" in its\n    `inputs`. Do NOT list USER_QUERY on a fan-out worker — it will\n    see the whole multi-item query and answer for all items.\n  - Instead, set `metadata.question` to the specific sub-question\n    for that worker. It is rendered into the worker's prompt as a\n    `QUESTION:` block.\n  - The `formatter` SHOULD list \"USER_QUERY\" in its inputs so it\n    can phrase the final answer against the user's actual ask.\n\nWhen the user asks to compare or process N concrete items\n(\"compare A, B, C\" / \"top 3 results\"), emit one node per item so\nthe orchestrator can run them in parallel. Do NOT consolidate.\nEach per-item worker must carry its item in `metadata.question`\nand must NOT list USER_QUERY in its inputs.\n\nWhen the user demands a strict format constraint the writer might\nmiss (\"exactly 5-7-5 syllables\", \"valid JSON\", \"≤ 280 characters\"),\ninsert a `critic` node between the writing node and the formatter.\nIts input is the writing node id. Its metadata.question repeats\nthe constraint. If the critic fails, the orchestrator re-plans.\n\nIf MEMORY HITS appear in the prompt, the agent already has indexed\nmaterial relevant to this query (FAISS-ranked vector hits with\nchunks). Prefer routing the answer through the existing knowledge\nbase: emit a `retriever` or, when the hits clearly answer the query\nalready, go straight to a `formatter` that synthesises from MEMORY\nHITS — do NOT emit a `researcher` to re-fetch material the agent\nhas already indexed.\n\nIf FAILURE appears in the prompt, do not re-emit the failing step\non the same inputs.\n\nExample — single-item query (researcher takes USER_QUERY because\nthere is nothing to fan out over):\n{\"rationale\": \"Look it up and answer.\",\n \"nodes\": [\n   {\"skill\":\"researcher\",\"inputs\":[\"USER_QUERY\"],\n    \"metadata\":{\"label\":\"r1\",\"question\":\"...\"}},\n   {\"skill\":\"formatter\",\"inputs\":[\"USER_QUERY\",\"n:r1\"],\n    \"metadata\":{\"label\":\"out\"}}]}\n\nExample — fan-out over N items (\"populations of London, Paris,\nBerlin; which two are closest?\"). Each researcher is scoped by\nmetadata.question and does NOT receive USER_QUERY; the formatter\ndoes, so it can answer the comparison the user asked for:\n{\"rationale\": \"Fetch each city's population in parallel, then compare.\",\n \"nodes\": [\n   {\"skill\":\"researcher\",\"inputs\":[],\n    \"metadata\":{\"label\":\"rL\",\"question\":\"current population of London\"}},\n   {\"skill\":\"researcher\",\"inputs\":[],\n    \"metadata\":{\"label\":\"rP\",\"question\":\"current population of Paris\"}},\n   {\"skill\":\"researcher\",\"inputs\":[],\n    \"metadata\":{\"label\":\"rB\",\"question\":\"current population of Berlin\"}},\n   {\"skill\":\"formatter\",\"inputs\":[\"USER_QUERY\",\"n:rL\",\"n:rP\",\"n:rB\"],\n    \"metadata\":{\"label\":\"out\"}}]}\n\nUSER_QUERY: From the SOURCE block below only, extract JSON with birth_year, death_year, and contributions (array of exactly 3 strings). Do not add fields not stated in SOURCE.\r\n\r\nInsert a critic node between distiller and formatter. The critic must fail if contributions does not contain exactly 3 items or if any value is not supported by SOURCE.\r\n\r\nSOURCE:\r\nClaude Shannon was born in 1916 and died in 2001. His three contributions were information theory, digital circuit design theory, and cryptographic theory.\r\n\n\nMEMORY HITS (8 from FAISS):\n  - [fact] Claude Shannon's birth date, death date, and contributions to information theory.\n      source: user_query\n  - [fact] Claude Shannon birth and death dates and three contributions to information theory\n      source: user_query\n      raw: When was Claude Shannon born and when did he die? Name three of his contributions to information theory.\n  - [tool_outcome] Population data comparison for London, Paris, and Berlin\n      source: user_query\n      raw: Find the populations of London, Paris, Berlin and tell me which two are closest in size.\n  - [tool_outcome] Population data comparison for London, Paris, and Berlin\n      source: user_query\n      raw: Find the populations of London, Paris, Berlin and tell me which two are closest in size.\n  - [tool_outcome] Attempting to read from non-existent file path.\n      source: user_query\n      raw: Read /nonexistent/path.txt and tell me what's in it.\n  - [tool_outcome] Population lookup and comparison for London, Paris, and Berlin\n      source: user_query\n      raw: Find the populations of London, Paris, Berlin and tell me which two are closest in size.\n  - [fact] Current populations and growth rates of Lagos, Cairo, and Kinshasa.\n      source: user_query\n      raw: For Lagos, Cairo, and Kinshasa, find current populations and growth rates\nand tell me which is growing fastest.\n  - [fact] Find the current populations of London, Paris, and Berlin to determine the closest cities in population size.\n      source: user_query\n      raw: Find the current populations of London, Paris, and Berlin, then tell me which two cities are closest in population size.\n\nINPUTS:\n[\n  {\n    \"id\": \"USER_QUERY\",\n    \"kind\": \"query\",\n    \"value\": \"From the SOURCE block below only, extract JSON with birth_year, death_year, and contributions (array of exactly 3 strings). Do not add fields not stated in SOURCE.\\r\\n\\r\\nInsert a critic node between distiller and formatter. The critic must fail if contributions does not contain exactly 3 items or if any value is not supported by SOURCE.\\r\\n\\r\\nSOURCE:\\r\\nClaude Shannon was born in 1916 and died in 2001. His three contributions were information theory, digital circuit design theory, and cryptographic theory.\\r\\n\"\n  }\n]",
+  "started_at": 1780486542.4779167,
+  "completed_at": 1780486550.0731506,
+  "retries": 0
+}

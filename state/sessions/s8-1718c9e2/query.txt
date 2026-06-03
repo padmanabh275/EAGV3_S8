@@ -1,0 +1,6 @@
+From the SOURCE block below only, extract JSON with birth_year, death_year, and contributions (array of exactly 3 strings). Do not add fields not stated in SOURCE.
+
+Insert a critic node between distiller and formatter. The critic must fail if contributions does not contain exactly 3 items or if any value is not supported by SOURCE.
+
+SOURCE:
+Claude Shannon was born in 1916 and died in 2001. His three contributions were information theory, digital circuit design theory, and cryptographic theory.

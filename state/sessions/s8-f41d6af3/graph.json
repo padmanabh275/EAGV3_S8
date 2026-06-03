@@ -1,0 +1,80 @@
+{
+  "directed": true,
+  "multigraph": false,
+  "graph": {},
+  "nodes": [
+    {
+      "skill": "planner",
+      "inputs": [
+        "USER_QUERY"
+      ],
+      "metadata": {},
+      "status": "complete",
+      "result": {
+        "success": true,
+        "agent_name": "planner",
+        "output": {
+          "rationale": "The requested file does not exist, but I will synthesize the answer using the indexed knowledge base.",
+          "nodes": [
+            {
+              "skill": "formatter",
+              "inputs": [
+                "USER_QUERY"
+              ],
+              "metadata": {
+                "label": "out",
+                "question": "What is the content of /nonexistent/path.txt?"
+              }
+            }
+          ]
+        },
+        "artifacts": [],
+        "successors": [
+          {
+            "skill": "formatter",
+            "inputs": [
+              "USER_QUERY"
+            ],
+            "metadata": {
+              "label": "out",
+              "question": "What is the content of /nonexistent/path.txt?"
+            }
+          }
+        ],
+        "cost": 0.0,
+        "elapsed_s": 4.901639223098755,
+        "provider": "openai",
+        "error": null
+      },
+      "_result_typed": true,
+      "id": "n:1"
+    },
+    {
+      "skill": "formatter",
+      "inputs": [
+        "USER_QUERY"
+      ],
+      "metadata": {
+        "label": "out",
+        "question": "What is the content of /nonexistent/path.txt?"
+      },
+      "status": "complete",
+      "result": {
+        "success": true,
+        "agent_name": "formatter",
+        "output": {
+          "final_answer": "The file /nonexistent/path.txt does not exist, so I cannot provide its content."
+        },
+        "artifacts": [],
+        "successors": [],
+        "cost": 0.0,
+        "elapsed_s": 4.235650539398193,
+        "provider": "openai",
+        "error": null
+      },
+      "_result_typed": true,
+      "id": "n:2"
+    }
+  ],
+  "edges": []
+}

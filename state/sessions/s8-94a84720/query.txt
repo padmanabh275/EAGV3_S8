@@ -1,0 +1,1 @@
+Use live web search only. For Tokyo, Seoul, and Mexico City separately, find each city's current population, then tell me which two cities are closest in population size.

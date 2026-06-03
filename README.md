@@ -1,12 +1,19 @@
 # Understanding your agent runs (`state/sessions/`)
 
+Companion to [`S8SharedCode/README.md`](../../../README.md). That file is the **package overview and quickstart**; this file is the **session DAG guide** plus **recorded runs** and **paths for everything changed in this build**.
+
+**Package root (run commands from `code/`):**
+
+`EAG_S8/S8SharedCode/`
+
 When you run:
 
 ```bash
+cd EAG_S8/S8SharedCode/code
 uv run python flow.py "your question"
 ```
 
-the orchestrator saves everything under a new folder here, named like **`s8-7e3d1a31`**.  
+the orchestrator saves everything under **`EAG_S8/S8SharedCode/code/state/sessions/<sid>/`**, named like **`s8-7e3d1a31`**.  
 Think of each folder as **one conversation attempt** — a small workflow the Planner designed, step by step.
 
 **Recorded example sessions (jump to section):**
@@ -18,6 +25,169 @@ Think of each folder as **one conversation attempt** — a small workflow the Pl
 | **`s8-899fe22c`** | **index sandbox/papers, find DPO** | **Example E** · [Corpus indexer](#corpus-indexer-sandbox-papers--faiss) |
 | `s8-94a84720` | 3-city fan-out (web) | Fan-out · `verify_fanout.py` |
 | `s8-cadb1096` / `s8-414ef814` | critic pass / fail | [Critic verdict test](#critic-verdict-test-pass-vs-fail--recovery) |
+
+---
+
+## S8 package layout (from README.md)
+
+Paths below are relative to **`EAG_S8/S8SharedCode/`** unless noted.
+
+```text
+S8SharedCode/
+├── README.md                    ← package overview, quickstart, troubleshooting
+├── .env.example                 ← copy to S8SharedCode/.env (or gateway/.env)
+├── .gitignore
+│
+├── code/                        ← agent; run flow.py from HERE
+│   ├── flow.py                  ← orchestrator (Graph + Executor + CLI)
+│   ├── skills.py                ← skill registry, prompts, MCP tool catalog
+│   ├── recovery.py              ← failure classification + critic-fail splice
+│   ├── persistence.py           ← writes state/sessions/<sid>/
+│   ├── mcp_runner.py            ← multi-turn tool-use loop
+│   ├── sandbox.py               ← subprocess Python runner (Coder output)
+│   ├── replay.py                ← stdin trace viewer per session
+│   ├── verify_fanout.py         ← fan-out timing verifier (added this build)
+│   ├── schemas.py
+│   ├── agent_config.yaml        ← skills catalogue (Coder, corpus_indexer, …)
+│   ├── gateway.py               ← HTTP client to LLM gateway :8108
+│   ├── mcp_server.py            ← MCP tools (web, files, index, search_knowledge)
+│   ├── memory.py / vector_index.py / artifacts.py
+│   ├── prompts/                 ← one .md per skill
+│   │   ├── planner.md
+│   │   ├── coder.md             ← implemented (was stub)
+│   │   ├── corpus_indexer.md    ← new skill (this build)
+│   │   ├── critic.md / distiller.md / formatter.md / …
+│   │   └── sandbox_executor.md
+│   ├── tests/
+│   │   └── test_recovery.py
+│   ├── sandbox/
+│   │   └── papers/              ← attention.md, cot.md, dpo.md, lora.md, react.md
+│   └── state/
+│       ├── memory.json          ← FAISS-backed memory store
+│       └── sessions/            ← YOU ARE HERE (readmedag.md + s8-* runs)
+│           ├── readmedag.md
+│           ├── _corpus_indexer_query.txt
+│           ├── _critic_pass_query.txt / _critic_fail_query.txt
+│           └── s8-<id>/         ← query.txt, graph.json, nodes/n_*.json
+│
+└── gateway/                     ← LLM Gateway V8, http://localhost:8108
+    ├── main.py
+    ├── client.py
+    ├── providers.py / router.py / embedders.py / db.py / cache.py
+    ├── agent_routing.yaml       ← skill → provider pins (openai default)
+    ├── gateway_v8.db
+    ├── pyproject.toml
+    ├── run.sh
+    └── run.ps1                  ← Windows; ASCII-only (fixed this build)
+```
+
+---
+
+## Quickstart paths (README.md)
+
+| Step | Path / command |
+|------|----------------|
+| Secrets template | `S8SharedCode/.env.example` → copy to `S8SharedCode/.env` |
+| Install gateway | `cd S8SharedCode/gateway && uv sync` |
+| Install agent | `cd S8SharedCode/code && uv sync` |
+| Start gateway | `cd S8SharedCode/gateway && uv run main.py` or `.\run.ps1` |
+| Gateway URL | `http://localhost:8108` (`GATEWAY_V8_PORT` in `.env`) |
+| Run agent | `cd S8SharedCode/code && uv run python flow.py "hello"` |
+| Session output | `S8SharedCode/code/state/sessions/s8-<hex>/` |
+| Replay a run | `cd S8SharedCode/code && uv run python replay.py s8-<id>` |
+| Fan-out verify | `cd S8SharedCode/code && uv run python verify_fanout.py s8-<id>` |
+
+On Windows, set `$env:PYTHONUTF8="1"` before `flow.py` if the terminal mangles box-drawing or em dashes in output.
+
+---
+
+## Architecture (README.md + this build)
+
+| Mechanism | Where | What it does |
+|-----------|--------|--------------|
+| Growing DAG | `code/flow.py` | Planner seeds nodes; skills run in parallel waves |
+| `internal_successors` | `code/agent_config.yaml` | **Coder** auto-adds **sandbox_executor** after coder finishes |
+| Formatter rewire | `code/flow.py` | After sandbox insert, formatter waiting on coder is rewired to sandbox **stdout** |
+| `critic: true` | `distiller` in yaml | Critic auto-inserted before distiller children |
+| Critic fail recovery | `code/recovery.py` | `recovery_reason: critic_fail` → recovery planner |
+| MCP tools per skill | `code/skills.py` `_TOOL_CATALOG` | Gateway tool-use channel; extended for **corpus_indexer** |
+| Provider pins | `gateway/agent_routing.yaml` | Per-skill default provider (e.g. `coder: openai`) |
+| Sessions | `code/persistence.py` | `state/sessions/<sid>/graph.json` + `nodes/n_*.json` |
+
+Read `code/flow.py` first (README recommendation). Do **not** patch `mcp_server.py`, `memory.py`, etc. per README “What NOT to touch” unless fixing a confirmed bug.
+
+---
+
+## Actual changes in this build (paths)
+
+Summary of work beyond stock Session 8 scaffolding. **No `flow.py` change** required for **corpus_indexer**; **one small `flow.py` change** for **coder** formatter rewire.
+
+### Gateway (S7 → V8 on port 8108)
+
+| Path | Change |
+|------|--------|
+| `S8SharedCode/gateway/main.py` | V8 routes: batch chat, cost-by-agent, reload `agent_routing.yaml` per request |
+| `S8SharedCode/gateway/router.py` | OpenAI in LIMITS/SHORTCUTS |
+| `S8SharedCode/gateway/providers.py` | `OpenAIProvider` |
+| `S8SharedCode/gateway/embedders.py` | `OpenAIEmbedder` |
+| `S8SharedCode/gateway/agent_routing.yaml` | Skills pinned to **openai** (incl. `critic`, `coder`, `corpus_indexer`) |
+| `S8SharedCode/gateway/run.ps1` | ASCII-only; fixes Windows parse errors |
+| `S8SharedCode/.env.example` | `GATEWAY_V8_PORT=8108`, `LLM_GATEWAY_V8_URL` notes |
+| `S8SharedCode/code/gateway.py` | Client targets port **8108** |
+
+### Orchestrator & env fixes
+
+| Path | Change |
+|------|--------|
+| `S8SharedCode/code/flow.py` | Rewire formatter to **sandbox_executor** when coder finishes (not coder source) |
+| `S8SharedCode/code/memory.py` | `import os` for classifier / `AGENT_LLM_PROVIDER` |
+
+### Skills implemented or added
+
+| Path | Change |
+|------|--------|
+| `S8SharedCode/code/prompts/coder.md` | Full Coder prompt; JSON `{"code", "rationale"}` |
+| `S8SharedCode/code/agent_config.yaml` | `coder` description; **`corpus_indexer`** entry |
+| `S8SharedCode/code/prompts/corpus_indexer.md` | **New skill** — `list_dir` + `index_document` |
+| `S8SharedCode/code/prompts/planner.md` | Coder, corpus_indexer examples and skill list |
+| `S8SharedCode/code/skills.py` | **`_TOOL_CATALOG`**: `list_dir`, `index_document` (reportable; not in README stub) |
+| `S8SharedCode/code/prompts/critic.md` | Used for pass/fail tests (existing) |
+| `S8SharedCode/gateway/agent_routing.yaml` | `critic: openai` (was groq) |
+
+### Verification & docs
+
+| Path | Change |
+|------|--------|
+| `S8SharedCode/code/verify_fanout.py` | Parallel fan-out wall-clock checker |
+| `S8SharedCode/code/state/sessions/readmedag.md` | This file — DAG guide + recorded sessions |
+| `S8SharedCode/code/state/sessions/_corpus_indexer_query.txt` | Corpus indexer demo query |
+| `S8SharedCode/code/state/sessions/_critic_pass_query.txt` | Critic pass demo query |
+| `S8SharedCode/code/state/sessions/_critic_fail_query.txt` | Critic fail + recovery demo query |
+
+### Recorded session folders (under `code/state/sessions/`)
+
+| Session folder | Requirement exercised |
+|----------------|----------------------|
+| `s8-7e3d1a31/` | Hello / basic planner → formatter |
+| `s8-e4b78873/` | **Coder** + sandbox → formatter (sum 1..1M) |
+| `s8-899fe22c/` | **Corpus indexer** (papers → FAISS); retriever 503 on same run |
+| `s8-94a84720/` | Fan-out PASS (`verify_fanout.py`) |
+| `s8-bbc2db62/` | Fan-out PASS (alt cities) |
+| `s8-a3df1fe7/` | Fan-out FAIL (memory → single retriever) |
+| `s8-cadb1096/` | Critic PASS |
+| `s8-414ef814/` | Critic FAIL + recovery loop (node cap) |
+
+---
+
+## When things go wrong (README.md)
+
+| Symptom | First place to look |
+|---------|---------------------|
+| Gateway won’t start | `S8SharedCode/gateway/` — `uv run main.py`, port **8108**, `.env` keys |
+| `503` / `502` on planner or retriever | Provider quota; wait after heavy **corpus_indexer** embed load |
+| `no code in upstream coder output` | `S8SharedCode/code/prompts/coder.md` — JSON shape |
+| Wrong or empty **FINAL** | `uv run python replay.py <sid>` — `nodes/n_*.json` → `prompt_sent` |
+| Fan-out not parallel | `uv run python verify_fanout.py <sid>`; query must avoid warm memory shortcut |
 
 ---
 
